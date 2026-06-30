@@ -19,14 +19,16 @@ export async function mirrorLeadToAirtable({ name, email }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          // typecast lets Airtable create select options / coerce types.
+          // typecast lets Airtable coerce types. Field names match the Leads table.
           typecast: true,
           records: [
             {
               fields: {
-                Name: name,
+                'Lead Name': name,
+                'Contact Name': name,
                 Email: email,
-                Source: SOURCE(),
+                'Lead Source': SOURCE(),
+                'Opted In': true,
               },
             },
           ],
