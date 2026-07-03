@@ -10,6 +10,16 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-insecure-secret-change-me';
 
+// Refuse to boot in production with the insecure fallback secret — a missing
+// JWT_SECRET in prod would let anyone forge login tokens.
+if (
+  process.env.NODE_ENV === 'production' &&
+  (!process.env.JWT_SECRET || JWT_SECRET === 'dev-insecure-secret-change-me')
+) {
+  console.error('[server] FATAL: JWT_SECRET must be set in production.');
+  process.exit(1);
+}
+
 const app = express();
 app.use(express.json());
 
@@ -118,6 +128,15 @@ app.post('/api/progress', authRequired, async (req, res) => {
   res.json({ ok: true });
 });
 
+// Un-mark a lesson (toggle a completed lesson back to not-done).
+app.delete('/api/progress/:lessonId', authRequired, async (req, res) => {
+  await pool.query('DELETE FROM course_progress WHERE user_id = $1 AND lesson_id = $2', [
+    req.user.id,
+    req.params.lessonId,
+  ]);
+  res.json({ ok: true });
+});
+
 // ── Saved deals (from calculators / analyzer) ─────────────────────────────
 app.get('/api/deals', authRequired, async (req, res) => {
   const { rows } = await pool.query(
@@ -134,6 +153,17 @@ app.post('/api/deals', authRequired, async (req, res) => {
     'INSERT INTO saved_deals (user_id, label, data) VALUES ($1, $2, $3) RETURNING id, label, data, created_at',
     [req.user.id, label, data]
   );
+  res.json({ deal: rows[0] });
+});
+
+app.patch('/api/deals/:id', authRequired, async (req, res) => {
+  const label = (req.body.label || '').trim();
+  if (!label) return res.status(400).json({ error: 'label required' });
+  const { rows } = await pool.query(
+    'UPDATE saved_deals SET label = $1 WHERE id = $2 AND user_id = $3 RETURNING id, label, data, created_at',
+    [label, req.params.id, req.user.id]
+  );
+  if (!rows[0]) return res.status(404).json({ error: 'Not found' });
   res.json({ deal: rows[0] });
 });
 

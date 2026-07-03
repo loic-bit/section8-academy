@@ -4,3 +4,7 @@ dist/
 .env.local
 *.log
 .DS_Store
+
+# Local audit artifacts (screenshots, source snapshots) — not shipped
+backup/
+audit/

@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../lib/auth.jsx';
+import BrandMark from '../components/BrandMark.jsx';
 
 export default function Login() {
   const { login, user } = useAuth();
@@ -9,7 +10,8 @@ export default function Login() {
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
 
-  if (user) return navigate('/', { replace: true });
+  // Already signed in — redirect declaratively (no side effect during render).
+  if (user) return <Navigate to="/" replace />;
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -67,11 +69,8 @@ export function AuthShell({ title, subtitle, children }) {
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="w-full max-w-md">
-        <div className="mb-6 text-center">
-          <div className="text-2xl font-extrabold">
-            Cashflow <span className="text-brand">2.0</span>
-          </div>
-          <div className="text-sm font-medium text-slate-400">Academy</div>
+        <div className="mb-6 flex justify-center text-center">
+          <BrandMark />
         </div>
         <div className="card">
           <h1 className="text-xl font-bold">{title}</h1>

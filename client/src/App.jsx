@@ -9,6 +9,7 @@ import Calculators from './routes/Calculators.jsx';
 import PropertyAnalyzer from './routes/PropertyAnalyzer.jsx';
 import DealFinder from './routes/DealFinder.jsx';
 import GetHelp from './routes/GetHelp.jsx';
+import Vault, { VaultAsset } from './routes/Vault.jsx';
 
 function Protected({ children }) {
   const { user, loading } = useAuth();
@@ -38,6 +39,8 @@ export default function App() {
       >
         <Route index element={<Home />} />
         <Route path="course" element={<Course />} />
+        <Route path="vault" element={<Vault />} />
+        <Route path="vault/:slug" element={<VaultAsset />} />
         <Route path="calculators" element={<Calculators />} />
         <Route path="analyzer" element={<PropertyAnalyzer />} />
         <Route path="finder" element={<DealFinder />} />

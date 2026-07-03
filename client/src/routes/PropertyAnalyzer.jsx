@@ -5,9 +5,9 @@ export default function PropertyAnalyzer() {
     <div>
       <PageHeader
         title="Property Analyzer"
-        subtitle="Paste an address and get an instant Section 8 verdict — rent vs FMR, cash flow, and a buy-box score."
+        subtitle="Paste an address and get an instant Section 8 verdict: rent vs FMR, cash flow, and a buy-box score."
       />
-      <ComingSoon note="v1 scaffold. Next: address input + manual rent/price entry that scores a property against your buy box, then wire a live data API (RentCast/ATTOM) to auto-pull comps, rents, and Section 8 FMR." />
+      <ComingSoon note="We're building this now. Soon you'll enter an address and instantly see how a property scores against Section 8 rents and your buy box. In the meantime, run any deal through the Calculators tab." />
     </div>
   );
 }

@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { api } from '../lib/api.js';
 import PageHeader from '../components/PageHeader.jsx';
+import { money, pct, relTime } from '../lib/format.js';
 
 const DEFAULTS = {
   purchasePrice: 120000,
@@ -16,19 +17,15 @@ const DEFAULTS = {
   otherMonthly: 0,
 };
 
-const money = (n) =>
-  n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
-const pct = (n) => `${n.toFixed(1)}%`;
-
+// Deal math. Returns monthly cash flow plus the headline return metrics.
+// Note: cashInvested = down payment only (closing costs excluded — v1 simplification).
 function compute(v) {
   const down = (v.purchasePrice * v.downPct) / 100;
   const loan = v.purchasePrice - down;
   const monthlyRate = v.rate / 100 / 12;
   const n = v.termYears * 12;
   const mortgage =
-    monthlyRate > 0
-      ? (loan * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -n))
-      : loan / n;
+    monthlyRate > 0 ? (loan * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -n)) : loan / n;
 
   const gross = v.monthlyRent;
   const vacancy = (gross * v.vacancyPct) / 100;
@@ -43,8 +40,8 @@ function compute(v) {
 
   const annualNOI = noiMonthly * 12;
   const annualCashFlow = cashFlow * 12;
-  const cashInvested = down; // simplification: down payment only (closing costs added later)
-  const capRate = (annualNOI / v.purchasePrice) * 100;
+  const cashInvested = down;
+  const capRate = v.purchasePrice > 0 ? (annualNOI / v.purchasePrice) * 100 : 0;
   const cashOnCash = cashInvested > 0 ? (annualCashFlow / cashInvested) * 100 : 0;
 
   return { down, loan, mortgage, operatingExpenses, cashFlow, annualCashFlow, capRate, cashOnCash };
@@ -64,27 +61,101 @@ const FIELDS = [
   { key: 'otherMonthly', label: 'Other monthly costs ($)' },
 ];
 
+// Plain-text summary of a saved deal for copy-to-clipboard.
+function dealText(deal) {
+  const r = deal.data?.results || {};
+  return [
+    deal.label,
+    `Monthly cash flow: ${money(r.cashFlow)}`,
+    `Cash-on-cash: ${pct(r.cashOnCash)}`,
+    `Cap rate: ${pct(r.capRate)}`,
+    `Annual cash flow: ${money(r.annualCashFlow)}`,
+  ].join('\n');
+}
+
 export default function Calculators() {
   const [v, setV] = useState(DEFAULTS);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [deals, setDeals] = useState([]);
+  const [editingId, setEditingId] = useState(null);
+  const [editLabel, setEditLabel] = useState('');
+  const [copiedId, setCopiedId] = useState(null);
+  const editRef = useRef(null);
+
   const r = useMemo(() => compute(v), [v]);
+
+  useEffect(() => {
+    api('/deals')
+      .then((d) => setDeals(d.deals || []))
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (editingId && editRef.current) editRef.current.focus();
+  }, [editingId]);
 
   const set = (key) => (e) => {
     setV({ ...v, [key]: parseFloat(e.target.value) || 0 });
     setSaved(false);
   };
 
+  const reset = () => {
+    setV(DEFAULTS);
+    setSaved(false);
+  };
+
   async function saveDeal() {
     setSaving(true);
     try {
-      const label = `Deal @ ${money(v.purchasePrice)} — ${money(r.cashFlow)}/mo`;
-      await api('/deals', { method: 'POST', body: { label, data: { inputs: v, results: r } } });
+      const label = `Deal @ ${money(v.purchasePrice)} · ${money(r.cashFlow)}/mo`;
+      const { deal } = await api('/deals', {
+        method: 'POST',
+        body: { label, data: { inputs: v, results: r } },
+      });
+      setDeals((prev) => [deal, ...prev]);
       setSaved(true);
     } catch {
-      /* ignore for v1 */
+      /* surfaced via disabled state; keep silent for v1 */
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function removeDeal(id) {
+    setDeals((prev) => prev.filter((d) => d.id !== id));
+    try {
+      await api(`/deals/${id}`, { method: 'DELETE' });
+    } catch {
+      /* optimistic; reconciles on reload */
+    }
+  }
+
+  function startEdit(deal) {
+    setEditingId(deal.id);
+    setEditLabel(deal.label);
+  }
+
+  async function commitEdit() {
+    const id = editingId;
+    const label = editLabel.trim();
+    setEditingId(null);
+    if (!label) return;
+    setDeals((prev) => prev.map((d) => (d.id === id ? { ...d, label } : d)));
+    try {
+      await api(`/deals/${id}`, { method: 'PATCH', body: { label } });
+    } catch {
+      /* optimistic label already applied; reconciles on reload */
+    }
+  }
+
+  async function copyDeal(deal) {
+    try {
+      await navigator.clipboard.writeText(dealText(deal));
+      setCopiedId(deal.id);
+      setTimeout(() => setCopiedId((c) => (c === deal.id ? null : c)), 1500);
+    } catch {
+      /* clipboard blocked — no-op */
     }
   }
 
@@ -94,18 +165,29 @@ export default function Calculators() {
     <div>
       <PageHeader
         title="Deal Calculator"
-        subtitle="Section 8 rental analysis — cash flow, cash-on-cash, and cap rate."
+        subtitle="Section 8 rental analysis: cash flow, cash-on-cash, and cap rate."
       />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Inputs */}
         <div className="card lg:col-span-2">
-          <h3 className="mb-4 font-bold">Deal inputs</h3>
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="font-bold">Deal inputs</h3>
+            <button onClick={reset} className="text-xs font-semibold text-slate-400 hover:text-slate-600">
+              Reset to defaults
+            </button>
+          </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {FIELDS.map((f) => (
               <div key={f.key}>
                 <label className="label">{f.label}</label>
-                <input type="number" className="field" value={v[f.key]} onChange={set(f.key)} />
+                <input
+                  type="number"
+                  className="field"
+                  value={v[f.key]}
+                  onChange={set(f.key)}
+                  min="0"
+                />
               </div>
             ))}
           </div>
@@ -135,6 +217,69 @@ export default function Calculators() {
             {saved ? '✓ Saved to your account' : saving ? 'Saving…' : 'Save this deal'}
           </button>
         </div>
+      </div>
+
+      {/* Saved deals */}
+      <div className="mt-10">
+        <h3 className="mb-4 text-lg font-bold">Saved deals</h3>
+        {deals.length === 0 ? (
+          <div className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
+            No saved deals yet. Run the numbers above and hit <span className="font-semibold">Save this deal</span> to keep it here.
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {deals.map((deal) => {
+              const cf = deal.data?.results?.cashFlow;
+              const cfPositive = (cf ?? 0) >= 0;
+              return (
+                <div key={deal.id} className="card flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="min-w-0 flex-1">
+                    {editingId === deal.id ? (
+                      <input
+                        ref={editRef}
+                        className="field"
+                        value={editLabel}
+                        onChange={(e) => setEditLabel(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') commitEdit();
+                          if (e.key === 'Escape') setEditingId(null);
+                        }}
+                        onBlur={commitEdit}
+                      />
+                    ) : (
+                      <button
+                        onClick={() => startEdit(deal)}
+                        title="Click to rename"
+                        className="block truncate text-left font-semibold hover:text-brand"
+                      >
+                        {deal.label}
+                      </button>
+                    )}
+                    <div className="mt-0.5 text-xs text-slate-400">
+                      {Number.isFinite(cf) && (
+                        <span className={cfPositive ? 'text-green-600' : 'text-red-500'}>
+                          {money(cf)}/mo
+                        </span>
+                      )}
+                      {deal.created_at && <span> · saved {relTime(deal.created_at)}</span>}
+                    </div>
+                  </div>
+                  <div className="flex shrink-0 gap-2">
+                    <button onClick={() => copyDeal(deal)} className="btn-ghost !px-3 !py-1.5 text-xs">
+                      {copiedId === deal.id ? '✓ Copied' : 'Copy'}
+                    </button>
+                    <button
+                      onClick={() => removeDeal(deal.id)}
+                      className="btn-ghost !px-3 !py-1.5 text-xs text-red-600 hover:bg-red-50"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

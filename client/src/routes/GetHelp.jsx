@@ -29,12 +29,11 @@ const PATHS = [
   },
 ];
 
-// Placeholder resource cards — Loic to fill with real guides/videos/links.
-const RESOURCES = [
-  { title: 'Section 8 Starter Guide', note: 'Add a link or embed here.' },
-  { title: 'Deal Analysis Walkthrough', note: 'Add a video or doc here.' },
-  { title: 'Financing Playbook', note: 'Add a link or embed here.' },
-];
+// Real resources only. Add entries as { title, desc, href } and the section
+// appears automatically; leave it empty and the section is hidden (no
+// "add a link here" placeholders shown to members).
+// e.g. { title: 'Section 8 Starter Guide', desc: 'The 10-page primer.', href: 'https://…' }
+const RESOURCES = [];
 
 export default function GetHelp() {
   return (
@@ -92,16 +91,30 @@ export default function GetHelp() {
         ))}
       </div>
 
-      {/* Resources — Loic fills these in */}
-      <h3 className="mb-4 text-lg font-bold">Helpful resources</h3>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {RESOURCES.map((r) => (
-          <div key={r.title} className="card">
-            <h4 className="font-semibold">{r.title}</h4>
-            <p className="mt-1 text-sm text-slate-400">{r.note}</p>
+      {/* Resources — only render when there are real resources to show. */}
+      {RESOURCES.length > 0 && (
+        <>
+          <h3 className="mb-4 text-lg font-bold">Helpful resources</h3>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            {RESOURCES.map((r) => {
+              const Card = r.href ? 'a' : 'div';
+              const linkProps = r.href
+                ? { href: r.href, target: '_blank', rel: 'noreferrer' }
+                : {};
+              return (
+                <Card
+                  key={r.title}
+                  {...linkProps}
+                  className={`card ${r.href ? 'transition hover:shadow-md' : ''}`}
+                >
+                  <h4 className="font-semibold">{r.title}</h4>
+                  {r.desc && <p className="mt-1 text-sm text-slate-500">{r.desc}</p>}
+                </Card>
+              );
+            })}
           </div>
-        ))}
-      </div>
+        </>
+      )}
     </div>
   );
 }
