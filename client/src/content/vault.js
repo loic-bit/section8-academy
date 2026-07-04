@@ -1,147 +1,33 @@
-// Toolkit Vault: the five member assets. Real, usable in-app content.
-// Voice: first person as Joseph. No em dashes.
-// Same block shape as the course (h / p / list / steps / tip / link).
-// `kind` labels each asset as a 'Toolkit', 'Vault', 'Blueprint', or 'System'.
+// Toolkit Vault assembler. Each category lives in ./vault/<name>.js as a default
+// export { category, assets:[{ slug, name, kind, icon, tagline, linkedTool?, body:[blocks] }] }.
+import analysis from './vault/analysis.js';
+import market from './vault/market.js';
+import financing from './vault/financing.js';
+import processCat from './vault/process.js';
+import management from './vault/management.js';
+import scaling from './vault/scaling.js';
 
-export const VAULT = [
-  {
-    slug: 'wealth-builder-toolkit',
-    name: 'The Wealth Builder Toolkit',
-    kind: 'Toolkit',
-    icon: '🧰',
-    tagline: 'The core templates and checklists I use on every single deal.',
-    body: [
-      { p: 'This is the working toolkit. When I add a door, these are the exact assets I open. Nothing theoretical here, just the checklists and templates that keep my deals clean and repeatable.' },
-      { h: 'The deal-day checklist' },
-      { steps: [
-        'Confirm the FMR for the metro and bedroom count.',
-        'Run the purchase price and rent through the Deal Calculator.',
-        'Check the number against your cash flow floor. Below it, you pass.',
-        'Order or walk the inspection items before you close.',
-        'Line up the voucher tenant application and PHA paperwork.',
-      ] },
-      { h: 'The tenant screening template' },
-      { list: [
-        'Verify income and voucher amount with the PHA.',
-        'Background and eviction history check.',
-        'Two landlord references, not just the current one.',
-        'Walkthrough expectations signed before move-in.',
-      ] },
-      { h: 'The annual re-inspection prep list' },
-      { list: [
-        'Working smoke and carbon monoxide detectors in every required spot.',
-        'No peeling paint, no exposed wiring, handrails secured.',
-        'Windows open, lock, and have screens. Heat works in every room.',
-        'GFCI outlets near water. No leaks under sinks.',
-      ] },
-      { tip: 'Run the same checklist every time and your deals stop surprising you. Boring and repeatable is what builds wealth.' },
-      { link: { to: '/calculators', label: 'Open the Deal Calculator' } },
-    ],
-  },
-  {
-    slug: 'real-estate-freedom-vault',
-    name: 'The Real Estate Freedom Vault',
-    kind: 'Vault',
-    icon: '🗝️',
-    tagline: 'The scripts, contacts, and outreach I use to keep deals flowing.',
-    body: [
-      { p: 'Freedom in this business comes from a pipeline you can count on. The Vault is where I keep the outreach and relationship pieces that keep new deals coming to me instead of me chasing them.' },
-      { h: 'The agent and wholesaler script' },
-      { p: 'I keep this short. "I buy 3-bed single family in [these zip codes], under [price], light rehab, cash or fast close. Section 8 is my model, so I care about rent-to-price, not curb appeal. Send me anything that fits and I will give you a yes or no same day." Fast answers are why they keep sending me deals.' },
-      { h: 'The relationships I build first' },
-      { list: [
-        'Two or three investor-friendly agents who know my buy box cold.',
-        'A wholesaler or two in each target market.',
-        'A PHA contact who will answer a paperwork question.',
-        'A rehab crew and a handyman I trust with a key.',
-        'A lender who understands DSCR and the Section 8 model.',
-      ] },
-      { h: 'The follow-up rule' },
-      { p: 'Most deals come from the second or third conversation, not the first. I check in with my sources on a simple cadence so I stay top of mind. When a deal that fits my box crosses their desk, I want to be the name they think of first.' },
-      { tip: 'Deals do not come from luck. They come from a handful of people who know exactly what you buy.' },
-    ],
-  },
-  {
-    slug: 'essential-investor-blueprint',
-    name: 'Essential Investor Blueprint',
-    kind: 'Blueprint',
-    icon: '📐',
-    tagline: 'The step-by-step path from zero to your first cash-flowing door.',
-    body: [
-      { p: 'If you are starting from nothing, follow this in order. This is the blueprint I would hand my younger self. Do not skip steps, do not jump ahead to deal ten before you have done deal one.' },
-      { h: 'The path' },
-      { steps: [
-        'Pick one market with strong FMR-to-price. Just one. Go deep, not wide.',
-        'Write your buy box on one page and commit to the cash flow floor.',
-        'Get pre-approved so you know your real price range before you shop.',
-        'Build two or three deal sources in that market.',
-        'Analyze ten deals in the calculator to train your eye. Buy none of them yet.',
-        'Make offers only on the ones that clear your box. Expect to hear a lot of no.',
-        'Close your first deal, ideally turnkey, and place a voucher tenant.',
-        'Document everything you just did. That document is your system for deal two.',
-      ] },
-      { h: 'The mistakes this blueprint keeps you from making' },
-      { list: [
-        'Buying in a pretty market with terrible rent-to-price.',
-        'Skipping the buy box and buying on emotion.',
-        'Guessing at rent instead of using the FMR.',
-        'Trying to BRRRR before you understand the inspection.',
-      ] },
-      { tip: 'One market, one buy box, one clean first deal. Momentum comes from finishing, not from planning forever.' },
-    ],
-  },
-  {
-    slug: 'property-success-system',
-    name: 'Property Success System',
-    kind: 'System',
-    icon: '🏠',
-    tagline: 'How I score a property against Section 8 rents and my buy box.',
-    linkedTool: { to: '/analyzer', label: 'Open the Property Analyzer' },
-    body: [
-      { p: 'This is the system behind how I judge a specific property, fast. The Property Analyzer tool automates part of this, and the full scoring logic lives here so you understand what it is checking.' },
-      { h: 'The five checks, in order' },
-      { steps: [
-        'Rent vs FMR: does the area FMR support the rent I need? If not, stop here.',
-        'Rent-to-price: is the monthly rent a strong percent of the all-in cost?',
-        'Condition: is this a light rehab, or a money pit hiding behind fresh paint?',
-        'Inspection readiness: how far is it from passing HQS on the first try?',
-        'Cash flow: does the calculator show green above my floor?',
-      ] },
-      { h: 'How I score it' },
-      { p: 'Each check is a pass or fail against my buy box, not a vibe. A property has to pass rent-to-price and cash flow, full stop. Condition and inspection tell me how much rehab budget to add before I re-run the numbers. If it fails the money checks, no amount of charm brings it back.' },
-      { tip: 'A great property in a weak market loses to an average property in a strong one. The numbers decide, every time.' },
-    ],
-  },
-  {
-    slug: 'cashflow-success-system',
-    name: 'Cashflow Success System',
-    kind: 'System',
-    icon: '💵',
-    tagline: 'The exact way I turn a purchase price and a rent into monthly cash flow.',
-    linkedTool: { to: '/calculators', label: 'Open the Deal Calculator' },
-    body: [
-      { p: 'Cash flow is the whole point. This system is how I get to a real, defensible monthly number instead of a hopeful one. The Deal Calculator runs this math for you. Here is the logic underneath it.' },
-      { h: 'The formula, plain' },
-      { list: [
-        'Start with gross rent, which is the FMR for that unit.',
-        'Subtract operating expenses: taxes, insurance, vacancy, maintenance, and management.',
-        'What is left is net operating income, before the loan.',
-        'Subtract the mortgage principal and interest.',
-        'What remains is your monthly cash flow. That is the number that matters.',
-      ] },
-      { h: 'The expenses new investors forget' },
-      { list: [
-        'Vacancy: budget for it even with voucher demand, because turns still happen.',
-        'Maintenance: an older working-class house needs a real reserve.',
-        'Management: budget it even if you self-manage, so your time is valued.',
-        'Capital expenses: roofs and HVAC do not care about your spreadsheet.',
-      ] },
-      { h: 'The rule I never break' },
-      { p: 'I use conservative inputs and I hold the cash flow floor. A deal that only cash flows with perfect assumptions is a deal that loses money the first time reality shows up. Green above the floor, or I pass.' },
-      { tip: 'Honest expenses today are cheaper than a surprise next year. Underwrite like the roof will leak, because eventually it will.' },
-      { link: { to: '/calculators', label: 'Run your numbers now' } },
-    ],
-  },
-];
+export const CATEGORIES = [analysis, market, financing, processCat, management, scaling];
+
+// Flat list of every content asset, each stamped with its category.
+export const VAULT = CATEGORIES.flatMap((c) => c.assets.map((a) => ({ ...a, category: c.category })));
 
 export const vaultBySlug = (slug) => VAULT.find((a) => a.slug === slug);
+
+// The live interactive calculators, surfaced at the top of the Vault.
+export const TOOLS = [
+  {
+    to: '/calculators',
+    name: 'Deal Calculator',
+    kind: 'Calculator',
+    icon: '🧮',
+    tagline: 'Run cash flow, cash-on-cash, and cap rate on any deal in seconds.',
+  },
+  {
+    to: '/brrrr',
+    name: 'BRRRR Calculator',
+    kind: 'Calculator',
+    icon: '♻️',
+    tagline: 'See how much of your cash you get back out of a buy-rehab-refinance deal.',
+  },
+];

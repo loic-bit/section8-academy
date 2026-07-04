@@ -1,0 +1,122 @@
+export default {
+  category: 'Deal Analysis',
+  assets: [
+    {
+      slug: 'deal-analysis-checklist',
+      name: 'Deal Analysis Checklist',
+      kind: 'Checklist',
+      icon: '✅',
+      tagline: 'The exact checklist I run before I make an offer.',
+      linkedTool: { to: '/calculators', label: 'Open the Deal Calculator' },
+      body: [
+        { p: 'This is the checklist I run on every single house before I write an offer. I do not skip steps, because the steps I skip are the ones that cost me money six months later. Work it top to bottom.' },
+        { h: 'Step 1: Confirm the rent number' },
+        {
+          steps: [
+            'Pull the HUD Fair Market Rent (FMR) for the county and bedroom count.',
+            'Call the local Public Housing Authority (PHA) and ask for the current payment standard, which can run 90 to 110 percent of FMR.',
+            'Check three comparable Section 8 rents on the street to make sure the payment standard is realistic for this specific house.',
+            'Use the lower of payment standard and market rent as your underwriting rent, never the top number.',
+          ],
+        },
+        { h: 'Step 2: Run the numbers' },
+        {
+          list: [
+            'All-in cost: purchase price, closing costs, and full rehab.',
+            'Monthly income: underwriting rent from Step 1.',
+            'Monthly expenses: taxes, insurance, 8 percent vacancy, 8 percent repairs, 8 percent capex, 8 to 10 percent management.',
+            'Cash flow floor: I want at least 200 dollars per door after every one of those expenses.',
+            'Cash-on-cash: I want 8 percent or better on a buy-and-hold, higher on a BRRRR.',
+          ],
+        },
+        { h: 'Step 3: Inspect the bones' },
+        {
+          list: [
+            'Roof age and remaining life.',
+            'HVAC or furnace age and function.',
+            'Foundation cracks, sloping floors, water in the basement.',
+            'Electrical panel size and any knob-and-tube or aluminum wiring.',
+            'Plumbing material and water pressure.',
+            'Sewer line scope on anything built before 1980.',
+          ],
+        },
+        { h: 'Step 4: HQS reality check' },
+        { p: 'Section 8 units must pass Housing Quality Standards (HQS). Before I buy, I walk the house asking one question on every item: will this pass inspection, or is it on my rehab list. Handrails, GFCI outlets in wet areas, working smoke and carbon monoxide detectors, no peeling paint on pre-1978 homes, and every window operable.' },
+        { p: 'If a deal clears all four steps and still holds a 200 dollar floor with 8 percent cash-on-cash, it is worth an offer. If it fails Step 1, I stop right there and move on.' },
+        { tip: 'The rent number is the whole deal. Verify it with the PHA in writing before you fall in love with a house, because a 150 dollar swing in rent can erase your entire cash flow.' },
+      ],
+    },
+    {
+      slug: 'rehab-cost-estimator',
+      name: 'Rehab Cost Estimator',
+      kind: 'Worksheet',
+      icon: '🔨',
+      tagline: 'Ballpark a rehab by system before you ever swing a hammer.',
+      linkedTool: { to: '/brrrr', label: 'Open the BRRRR Calculator' },
+      body: [
+        { p: 'When I walk a house, I do not guess one lump number. I price it system by system, add it up, then add a contingency. These are the ballpark ranges I use for a typical 1,000 to 1,400 square foot single family rehab. Your market will vary, so treat these as a starting point and adjust to your own contractor bids.' },
+        { h: 'Cost ranges by system' },
+        {
+          list: [
+            'Roof: 6,000 to 12,000 dollars for a full tear-off and replace.',
+            'HVAC: 5,000 to 8,000 dollars for a new furnace and central air.',
+            'Kitchen: 4,000 to 12,000 dollars for cabinets, counters, and a rental-grade appliance package.',
+            'Bathroom: 2,500 to 6,000 dollars per full bath.',
+            'Interior paint: 2,000 to 4,000 dollars for the whole house.',
+            'Flooring: 2 to 5 dollars per square foot for LVP, so 2,500 to 7,000 dollars across a house.',
+            'Electrical: 1,500 dollars for a panel swap, up to 8,000 to 12,000 dollars for a full rewire.',
+            'Plumbing: 1,500 dollars for fixtures and small repairs, up to 8,000 to 15,000 dollars for a full repipe or sewer line.',
+          ],
+        },
+        { h: 'How to build the number' },
+        {
+          steps: [
+            'Walk the house and mark every system as keep, repair, or replace.',
+            'Assign the low end of the range to light repair and the high end to full replacement.',
+            'Add the systems into a subtotal.',
+            'Add a contingency on top of that subtotal.',
+            'Use the final number, contingency included, in your deal underwriting.',
+          ],
+        },
+        { h: 'The contingency rule' },
+        { p: 'I add 15 percent contingency on a cosmetic rehab and 20 percent on anything that opens walls or touches the foundation. On a 30,000 dollar rehab that is 4,500 to 6,000 dollars set aside for the surprises you cannot see on a walkthrough. You will find them. Older Section 8 stock always hides something behind the drywall.' },
+        { p: 'Once you have a system-by-system total with contingency, drop it into the BRRRR calculator to see if the refinance leaves you at or near a full capital recovery.' },
+        { tip: 'The rehabs that blow up are the ones priced as one round number. Price every system on its own line, add 15 to 20 percent, and your worst surprise becomes a bad week instead of a dead deal.' },
+      ],
+    },
+    {
+      slug: 'rule-1-and-50',
+      name: 'The 1% and 50% Rule Guide',
+      kind: 'Guide',
+      icon: '📏',
+      tagline: 'The two quick filters every investor uses, and exactly when they lie.',
+      body: [
+        { p: 'The 1 percent rule and the 50 percent rule are the two fastest filters I use to sort a list of properties in under a minute each. They are not underwriting. They are triage. Here is how each one works and exactly where it will lead you wrong.' },
+        { h: 'The 1 percent rule' },
+        { p: 'Monthly rent should be at least 1 percent of the all-in cost. A house you buy and fix for 100,000 dollars should rent for 1,000 dollars or more. It is a rent-to-price ratio test, and in Section 8 markets I want to see 1 percent as a floor and 1.2 percent or better on the deals I actually chase.' },
+        { h: 'The 50 percent rule' },
+        { p: 'Operating expenses, everything except the mortgage, tend to run about 50 percent of gross rent over the long haul. Taxes, insurance, vacancy, repairs, capex, and management. On 1,200 dollars of rent, assume 600 dollars goes to expenses, leaving 600 dollars to cover the mortgage and produce cash flow.' },
+        { h: 'How to apply them together' },
+        {
+          steps: [
+            'Screen the list with the 1 percent rule and throw out anything under it.',
+            'On the survivors, apply the 50 percent rule to estimate net operating income.',
+            'Subtract your estimated mortgage payment to see if cash flow is even possible.',
+            'Only then pull the property into a full deal analysis.',
+          ],
+        },
+        { h: 'Where they lie' },
+        {
+          list: [
+            'High-tax markets: the 50 percent rule understates expenses badly where property taxes run 2.5 to 4 percent of value. Real expenses can hit 60 percent.',
+            'Old housing stock: a house full of 30-year-old systems will blow past 50 percent on capex alone.',
+            'Cheap price points: a 40,000 dollar house renting for 900 dollars passes the 1 percent rule at 2.25 percent, but low-price homes carry proportionally higher repair and turnover costs the ratio never shows.',
+            'High payment standards: strong voucher rent can make a house pass the 1 percent rule while the neighborhood quietly destroys you on vacancy and damage.',
+          ],
+        },
+        { p: 'Use both rules to decide what to analyze, never to decide what to buy. They tell you where to spend your time, not where to spend your money.' },
+        { tip: 'If a house fails the 1 percent rule, skip it. If it passes, do not celebrate, underwrite it. The rules are a bouncer at the door, not the person who signs your checks.' },
+      ],
+    },
+  ],
+};

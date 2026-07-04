@@ -6,6 +6,7 @@ import Signup from './routes/Signup.jsx';
 import Home from './routes/Home.jsx';
 import Course from './routes/Course.jsx';
 import Calculators from './routes/Calculators.jsx';
+import Brrrr from './routes/Brrrr.jsx';
 import PropertyAnalyzer from './routes/PropertyAnalyzer.jsx';
 import DealFinder from './routes/DealFinder.jsx';
 import GetHelp from './routes/GetHelp.jsx';
@@ -42,6 +43,7 @@ export default function App() {
         <Route path="vault" element={<Vault />} />
         <Route path="vault/:slug" element={<VaultAsset />} />
         <Route path="calculators" element={<Calculators />} />
+        <Route path="brrrr" element={<Brrrr />} />
         <Route path="analyzer" element={<PropertyAnalyzer />} />
         <Route path="finder" element={<DealFinder />} />
         <Route path="get-help" element={<GetHelp />} />
