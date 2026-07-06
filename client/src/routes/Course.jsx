@@ -119,7 +119,7 @@ export default function Course() {
   return (
     <div>
       <PageHeader
-        title="The Section 8 Cashflow System"
+        title="The Cashflow 2.0 Method"
         subtitle="Three levels. Each one leads into the next: believe it, do it, scale it."
       />
 
