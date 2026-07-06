@@ -122,6 +122,7 @@ export default function FiftyDoors() {
   return (
     <div>
       <PageHeader
+        back={{ to: '/vault', label: 'Toolkit' }}
         title="Path to 50 Doors"
         subtitle="It was never about how much you save. Your timeline is set by how good your deals are, not by your income. Move the sliders and see it."
       />

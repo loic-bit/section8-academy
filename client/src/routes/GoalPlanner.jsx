@@ -143,6 +143,7 @@ export default function GoalPlanner() {
   return (
     <div>
       <PageHeader
+        back={{ to: '/vault', label: 'Toolkit' }}
         title="Goal Planner: Turnkey vs BRRRR"
         subtitle="Set your goal, compare both strategies, and see how fast each one gets you there from your real starting position."
       />

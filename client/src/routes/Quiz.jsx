@@ -54,7 +54,7 @@ export default function Quiz() {
     const p = PROFILES[result.winner] || PROFILES.builder;
     return (
       <div>
-        <PageHeader title="Your investor profile" subtitle="Based on your capital, time, risk tolerance, and goals." />
+        <PageHeader back={{ to: '/vault', label: 'Toolkit' }} title="Your investor profile" subtitle="Based on your capital, time, risk tolerance, and goals." />
         <div className="card mx-auto max-w-2xl">
           <div className="mb-4 flex items-center gap-4">
             <span className="text-5xl">{p.icon}</span>
@@ -96,6 +96,7 @@ export default function Quiz() {
   return (
     <div>
       <PageHeader
+        back={{ to: '/vault', label: 'Toolkit' }}
         title="Investor Readiness Quiz"
         subtitle="Eight quick questions. Get your investor profile and the exact next moves that fit your situation."
       />

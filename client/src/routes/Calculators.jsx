@@ -64,17 +64,27 @@ const FIELDS = [
 // Plain-text summary of a saved deal for copy-to-clipboard.
 function dealText(deal) {
   const r = deal.data?.results || {};
-  return [
+  const lines = [
     deal.label,
     `Monthly cash flow: ${money(r.cashFlow)}`,
     `Cash-on-cash: ${pct(r.cashOnCash)}`,
     `Cap rate: ${pct(r.capRate)}`,
     `Annual cash flow: ${money(r.annualCashFlow)}`,
-  ].join('\n');
+  ];
+  if (deal.data?.listingUrl) lines.push(`Listing: ${deal.data.listingUrl}`);
+  return lines.join('\n');
+}
+
+// "zillow.com/..." -> "https://zillow.com/..." so saved links always open.
+function normalizeUrl(raw) {
+  const s = (raw || '').trim();
+  if (!s) return '';
+  return /^https?:\/\//i.test(s) ? s : `https://${s}`;
 }
 
 export default function Calculators() {
   const [v, setV] = useState(DEFAULTS);
+  const [listingUrl, setListingUrl] = useState('');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [deals, setDeals] = useState([]);
@@ -109,9 +119,10 @@ export default function Calculators() {
     setSaving(true);
     try {
       const label = `Deal @ ${money(v.purchasePrice)} · ${money(r.cashFlow)}/mo`;
+      const url = normalizeUrl(listingUrl);
       const { deal } = await api('/deals', {
         method: 'POST',
-        body: { label, data: { inputs: v, results: r } },
+        body: { label, data: { inputs: v, results: r, ...(url ? { listingUrl: url } : {}) } },
       });
       setDeals((prev) => [deal, ...prev]);
       setSaved(true);
@@ -164,6 +175,7 @@ export default function Calculators() {
   return (
     <div>
       <PageHeader
+        back={{ to: '/vault', label: 'Toolkit' }}
         title="Deal Calculator"
         subtitle="Section 8 rental analysis: cash flow, cash-on-cash, and cap rate."
       />
@@ -190,6 +202,20 @@ export default function Calculators() {
                 />
               </div>
             ))}
+          </div>
+          <div className="mt-4 border-t border-slate-100 pt-4">
+            <label className="label">Listing link (optional)</label>
+            <input
+              type="url"
+              className="field"
+              placeholder="Paste the Zillow, Redfin, or MLS link for this property"
+              value={listingUrl}
+              onChange={(e) => {
+                setListingUrl(e.target.value);
+                setSaved(false);
+              }}
+            />
+            <p className="mt-1.5 text-xs text-slate-400">Saved with the deal so you can jump back to the property later.</p>
           </div>
         </div>
 
@@ -257,7 +283,7 @@ export default function Calculators() {
                     )}
                     <div className="mt-0.5 text-xs text-slate-400">
                       {Number.isFinite(cf) && (
-                        <span className={cfPositive ? 'text-green-600' : 'text-red-500'}>
+                        <span className={cfPositive ? 'text-success' : 'text-danger'}>
                           {money(cf)}/mo
                         </span>
                       )}
@@ -265,6 +291,16 @@ export default function Calculators() {
                     </div>
                   </div>
                   <div className="flex shrink-0 gap-2">
+                    {deal.data?.listingUrl && (
+                      <a
+                        href={deal.data.listingUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="btn-ghost !px-3 !py-1.5 text-xs text-brand"
+                      >
+                        Listing ↗
+                      </a>
+                    )}
                     <button onClick={() => copyDeal(deal)} className="btn-ghost !px-3 !py-1.5 text-xs">
                       {copiedId === deal.id ? '✓ Copied' : 'Copy'}
                     </button>

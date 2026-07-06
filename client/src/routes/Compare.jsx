@@ -20,6 +20,7 @@ export default function Compare() {
   return (
     <div>
       <PageHeader
+        back={{ to: '/vault', label: 'Toolkit' }}
         title="Strategy Comparison"
         subtitle="Airbnb, flips, ADUs, traditional rentals, and Section 8, judged on the same five filters. No hype, just the math."
       />
