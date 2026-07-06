@@ -7,7 +7,7 @@ const BASE = () => (process.env.AIRTABLE_BASE_ID || '').trim();
 const TABLE = () => (process.env.AIRTABLE_LEADS_TABLE || '').trim();
 const SOURCE = () => (process.env.AIRTABLE_SOURCE_LABEL || 'Free Academy').trim();
 
-export async function mirrorLeadToAirtable({ name, email }) {
+export async function mirrorLeadToAirtable({ name, email, source }) {
   if (!TOKEN() || !BASE() || !TABLE()) return; // mirror disabled
   try {
     const res = await fetch(
@@ -27,7 +27,7 @@ export async function mirrorLeadToAirtable({ name, email }) {
                 'Lead Name': name,
                 'Contact Name': name,
                 Email: email,
-                'Lead Source': SOURCE(),
+                'Lead Source': source || SOURCE(),
                 'Opted In': true,
               },
             },

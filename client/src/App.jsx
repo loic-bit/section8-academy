@@ -7,10 +7,14 @@ import Home from './routes/Home.jsx';
 import Course from './routes/Course.jsx';
 import Calculators from './routes/Calculators.jsx';
 import Brrrr from './routes/Brrrr.jsx';
+import GoalPlanner from './routes/GoalPlanner.jsx';
+import FiftyDoors from './routes/FiftyDoors.jsx';
+import Quiz from './routes/Quiz.jsx';
+import Compare from './routes/Compare.jsx';
 import PropertyAnalyzer from './routes/PropertyAnalyzer.jsx';
-import DealFinder from './routes/DealFinder.jsx';
+import Finder from './routes/Finder.jsx';
 import GetHelp from './routes/GetHelp.jsx';
-import Vault, { VaultAsset } from './routes/Vault.jsx';
+import Vault, { VaultAsset, KitPage } from './routes/Vault.jsx';
 
 function Protected({ children }) {
   const { user, loading } = useAuth();
@@ -41,11 +45,16 @@ export default function App() {
         <Route index element={<Home />} />
         <Route path="course" element={<Course />} />
         <Route path="vault" element={<Vault />} />
+        <Route path="vault/kit/:slug" element={<KitPage />} />
         <Route path="vault/:slug" element={<VaultAsset />} />
         <Route path="calculators" element={<Calculators />} />
         <Route path="brrrr" element={<Brrrr />} />
+        <Route path="plan" element={<GoalPlanner />} />
+        <Route path="fifty-doors" element={<FiftyDoors />} />
+        <Route path="quiz" element={<Quiz />} />
+        <Route path="compare" element={<Compare />} />
         <Route path="analyzer" element={<PropertyAnalyzer />} />
-        <Route path="finder" element={<DealFinder />} />
+        <Route path="finder" element={<Finder />} />
         <Route path="get-help" element={<GetHelp />} />
       </Route>
 

@@ -23,6 +23,17 @@ if (
 const app = express();
 app.use(express.json());
 
+// Route any async handler's rejection into Express instead of crashing the
+// process (Node kills on unhandled rejection). Applied at registration time.
+const wrapAsync = (fn) =>
+  typeof fn === 'function' && fn.constructor.name === 'AsyncFunction'
+    ? (req, res, next) => fn(req, res, next).catch(next)
+    : fn;
+for (const m of ['get', 'post', 'patch', 'delete', 'put']) {
+  const orig = app[m].bind(app);
+  app[m] = (path, ...handlers) => orig(path, ...handlers.map(wrapAsync));
+}
+
 // ── Auth helpers ────────────────────────────────────────────────────────
 function signToken(user) {
   return jwt.sign(
@@ -175,10 +186,42 @@ app.delete('/api/deals/:id', authRequired, async (req, res) => {
   res.json({ ok: true });
 });
 
+// ── AI Deal Finder trial requests ─────────────────────────────────────────
+app.get('/api/dealfinder/trial', authRequired, async (req, res) => {
+  const { rows } = await pool.query(
+    "SELECT created_at FROM trial_requests WHERE user_id = $1 AND product = 'dealfinder'",
+    [req.user.id]
+  );
+  res.json({ requested: !!rows[0], at: rows[0]?.created_at || null });
+});
+
+app.post('/api/dealfinder/trial', authRequired, async (req, res) => {
+  await pool.query(
+    `INSERT INTO trial_requests (user_id, product) VALUES ($1, 'dealfinder')
+     ON CONFLICT (user_id, product) DO NOTHING`,
+    [req.user.id]
+  );
+  // Let the sales team see the raised hand in the CRM. Fire and forget.
+  mirrorLeadToAirtable({
+    name: req.user.name,
+    email: req.user.email,
+    source: 'AI Deal Finder Trial',
+  });
+  res.json({ ok: true });
+});
+
 // ── Static frontend (production build) + SPA fallback ─────────────────────
 const distDir = path.join(__dirname, '..', 'dist');
 app.use(express.static(distDir));
 app.get('*', (_req, res) => res.sendFile(path.join(distDir, 'index.html')));
+
+// Final safety net: async route errors land here as a 500, never a crash.
+app.use((err, _req, res, _next) => {
+  console.error('[api]', err.message);
+  if (!res.headersSent) {
+    res.status(500).json({ error: 'Something went wrong. Please try again.' });
+  }
+});
 
 // ── Boot ────────────────────────────────────────────────────────────────
 initDb()

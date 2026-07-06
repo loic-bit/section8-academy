@@ -3,15 +3,13 @@ import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../lib/auth.jsx';
 import BrandMark from './BrandMark.jsx';
 
-// `soon` flags stub tools so members know they aren't live yet (was: presented as real).
+// Five items. Calculators and quizzes live inside the Toolkit and are linked
+// contextually from lessons, so the nav stays calm.
 const NAV = [
   { to: '/', label: 'Home', icon: '🏠', end: true },
-  { to: '/course', label: 'Free Course', icon: '🎓' },
-  { to: '/vault', label: 'Toolkit Vault', icon: '🧰' },
-  { to: '/calculators', label: 'Deal Calculator', icon: '🧮' },
-  { to: '/brrrr', label: 'BRRRR Calculator', icon: '♻️' },
-  { to: '/analyzer', label: 'Property Analyzer', icon: '🏚️', soon: true },
-  { to: '/finder', label: 'Deal Finder', icon: '🔎', soon: true },
+  { to: '/course', label: 'The Course', icon: '🎓' },
+  { to: '/vault', label: 'Toolkit', icon: '🧰' },
+  { to: '/finder', label: 'AI Deal Finder', icon: '✨', badge: 'Trial' },
   { to: '/get-help', label: 'Get Help', icon: '🤝' },
 ];
 
@@ -37,9 +35,9 @@ function SidebarContent({ user, onLogout, onNavigate }) {
           >
             <span aria-hidden>{item.icon}</span>
             <span className="flex-1">{item.label}</span>
-            {item.soon && (
-              <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-400">
-                Soon
+            {item.badge && (
+              <span className="rounded-full bg-brand/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-brand">
+                {item.badge}
               </span>
             )}
           </NavLink>

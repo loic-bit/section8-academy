@@ -11,6 +11,12 @@ export const pool = new Pool({
     : false,
 });
 
+// A dropped idle connection must never crash the process. The pool replaces
+// the client; in-flight queries reject and surface as a 500 on that request.
+pool.on('error', (err) => {
+  console.error('[db] idle client error (recovered):', err.message);
+});
+
 // Create tables on boot if they don't exist. Safe to run every start.
 export async function initDb() {
   await pool.query(`
@@ -36,6 +42,14 @@ export async function initDb() {
       label      TEXT NOT NULL,
       data       JSONB NOT NULL,
       created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );
+
+    CREATE TABLE IF NOT EXISTS trial_requests (
+      id         SERIAL PRIMARY KEY,
+      user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      product    TEXT NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      UNIQUE (user_id, product)
     );
   `);
   console.log('[db] schema ready');
