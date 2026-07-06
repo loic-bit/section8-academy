@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { pool, initDb } from './db.js';
 import { mirrorLeadToAirtable } from './airtable.js';
+import { mirrorSignupToKit } from './kit.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3000;
@@ -84,8 +85,9 @@ app.post('/api/auth/signup', async (req, res) => {
     );
     const user = rows[0];
 
-    // Mirror to CRM — fire and forget, never blocks signup.
+    // Mirror to CRM + email list — fire and forget, never blocks signup.
     mirrorLeadToAirtable({ name, email });
+    mirrorSignupToKit({ name, email });
 
     res.json({ token: signToken(user), user: publicUser(user) });
   } catch (e) {
