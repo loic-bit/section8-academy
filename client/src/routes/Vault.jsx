@@ -41,7 +41,7 @@ export default function Vault() {
               <span className="text-3xl">{t.icon}</span>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <h3 className="font-bold">{t.name}</h3>
+                  <h3 className="font-display font-bold">{t.name}</h3>
                   <span className="badge-brand">{t.kind}</span>
                 </div>
                 <p className="mt-0.5 text-sm text-slate-500">{t.tagline}</p>
@@ -88,8 +88,8 @@ export default function Vault() {
                 <span className="text-3xl">{a.icon}</span>
                 <span className="badge-muted">{a.kind}</span>
               </div>
-              <h3 className="font-bold">{a.name}</h3>
-              <p className="mt-1 flex-1 text-sm text-slate-500">{a.tagline}</p>
+              <h3 className="font-display font-bold">{a.name}</h3>
+              <p className="mt-1 flex-1 text-sm leading-relaxed text-slate-500">{a.tagline}</p>
               <div className="mt-4 flex items-center justify-between">
                 <span className="text-xs text-slate-400">{a.category}</span>
                 <span className="text-sm font-semibold text-brand">Open →</span>
@@ -130,8 +130,8 @@ export function VaultAsset() {
             <span className="badge-brand">{asset.kind}</span>
             <span className="text-xs text-slate-400">{asset.category}</span>
           </div>
-          <h1 className="text-2xl font-extrabold">{asset.name}</h1>
-          <p className="mt-1 text-slate-500">{asset.tagline}</p>
+          <h1 className="font-display text-2xl font-bold tracking-tight">{asset.name}</h1>
+          <p className="mt-1 leading-relaxed text-slate-500">{asset.tagline}</p>
         </div>
       </div>
 

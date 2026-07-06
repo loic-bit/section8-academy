@@ -122,9 +122,9 @@ export default function Brrrr() {
         </div>
 
         <div className="space-y-4">
-          <div className={`card ${r.fullRecycle ? 'border-brand/30 bg-brand/5' : cfPositive ? 'border-green-200 bg-green-50' : 'border-amber-200 bg-amber-50'}`}>
-            <div className="text-sm font-medium text-slate-600">Cash left in the deal</div>
-            <div className={`text-3xl font-extrabold ${r.cashLeftIn <= 0 ? 'text-brand' : 'text-ink'}`}>
+          <div className={`card ${r.fullRecycle ? 'border-brand/30 bg-brand/5' : cfPositive ? 'border-success/20 bg-success-soft' : 'border-warning/20 bg-warning-soft'}`}>
+            <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">Cash left in the deal</div>
+            <div className={`num font-display mt-1 text-[32px] font-bold leading-none ${r.cashLeftIn <= 0 ? 'text-brand' : 'text-ink'}`}>
               {money(Math.max(0, r.cashLeftIn))}
             </div>
             {r.fullRecycle ? (
@@ -161,7 +161,7 @@ function Row({ label, value, strong, positive }) {
   return (
     <div className="flex items-center justify-between">
       <span className="text-slate-500">{label}</span>
-      <span className={`font-semibold ${strong ? (positive ? 'text-green-700' : 'text-red-600') : ''}`}>
+      <span className={`num font-semibold tabular-nums ${strong ? (positive ? 'text-success' : 'text-danger') : ''}`}>
         {value}
       </span>
     </div>

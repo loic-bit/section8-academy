@@ -195,9 +195,9 @@ export default function Calculators() {
 
         {/* Results */}
         <div className="space-y-4">
-          <div className={`card ${positive ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}>
-            <div className="text-sm font-medium text-slate-600">Monthly cash flow</div>
-            <div className={`text-3xl font-extrabold ${positive ? 'text-green-700' : 'text-red-600'}`}>
+          <div className={`card ${positive ? 'border-success/20 bg-success-soft' : 'border-danger/20 bg-danger-soft'}`}>
+            <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">Monthly cash flow</div>
+            <div className={`num font-display mt-1 text-[32px] font-bold leading-none ${positive ? 'text-success' : 'text-danger'}`}>
               {money(r.cashFlow)}
             </div>
           </div>
@@ -289,7 +289,7 @@ function Row({ label, value }) {
   return (
     <div className="flex items-center justify-between">
       <span className="text-slate-500">{label}</span>
-      <span className="font-semibold">{value}</span>
+      <span className="num font-semibold tabular-nums">{value}</span>
     </div>
   );
 }

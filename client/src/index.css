@@ -2,6 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─────────────────────────────────────────────────────────────
+   Design tokens. Every value in the app derives from these.
+   Documented in DESIGN-SYSTEM.md.
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* Spacing scale (4pt) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Color layers */
+  --bg-base: #f6f8f9;
+  --bg-raised: #ffffff;
+  --border: #e6ebef;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #8a97a6;
+  --brand: #0f766e;
+
+  /* Motion */
+  --dur-fast: 160ms;
+  --dur-slow: 280ms;
+  --ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
 html,
 body,
 #root {
@@ -10,42 +40,99 @@ body,
 
 body {
   @apply bg-slate-50 text-ink font-sans antialiased;
-  /* Subtle depth so the app reads as a real platform, not a flat page. */
-  background-image: radial-gradient(60rem 60rem at 100% -10%, rgba(15, 118, 110, 0.06), transparent 60%);
+  background-color: var(--bg-base);
+  /* Quiet depth so the app reads as a product, not a flat page. */
+  background-image: radial-gradient(52rem 52rem at 100% -12%, rgba(15, 118, 110, 0.05), transparent 60%);
   background-attachment: fixed;
 }
 
+/* Tabular, slightly tightened figures everywhere numbers matter. */
+.num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* Display type: headings and hero numbers. */
+.font-display {
+  font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* Elegant, consistent keyboard focus for every interactive element. */
+*:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Quiet, styled scrollbars on overflow areas. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #d5dce3;
+  border-radius: 9999px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: #c0c9d2;
+  background-clip: padding-box;
+}
+
+/* Respect reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 @layer components {
-  /* Buttons */
+  /* Buttons: consistent radius, subtle press feedback, token motion. */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition duration-160 ease-premium active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50;
   }
   .btn-primary {
     @apply btn bg-brand text-white shadow-sm hover:bg-brand-dark;
   }
   .btn-ghost {
-    @apply btn border border-slate-300 bg-white text-ink hover:bg-slate-100;
+    @apply btn border border-slate-200 bg-white text-ink hover:border-slate-300 hover:bg-slate-50;
   }
 
   /* Inputs */
   .field {
-    @apply w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20;
+    @apply w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-ink outline-none transition duration-160 ease-premium placeholder:text-slate-400 focus:border-brand focus:ring-4 focus:ring-brand/10;
   }
   .label {
-    @apply mb-1 block text-sm font-medium text-slate-700;
+    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500;
   }
 
   /* Surfaces */
   .card {
-    @apply rounded-2xl border border-slate-200 bg-white p-6 shadow-sm;
+    @apply rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm;
   }
   .card-hover {
-    @apply transition duration-150 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md;
+    @apply transition duration-160 ease-premium hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md;
   }
 
   /* Labels + chips */
   .eyebrow {
-    @apply text-[11px] font-bold uppercase tracking-[0.14em] text-brand;
+    @apply text-[11px] font-bold uppercase tracking-[0.16em] text-brand;
   }
   .badge {
     @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide;
@@ -54,23 +141,23 @@ body {
     @apply badge bg-brand/10 text-brand;
   }
   .badge-muted {
-    @apply badge bg-slate-100 text-slate-400;
+    @apply badge bg-slate-100 text-slate-500;
   }
   .chip {
-    @apply inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:border-slate-300 hover:bg-slate-50;
+    @apply inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3.5 py-1.5 text-sm font-medium text-slate-600 transition duration-160 ease-premium hover:border-slate-300 hover:bg-slate-50;
   }
   .chip-active {
-    @apply border-brand bg-brand text-white hover:border-brand hover:bg-brand;
+    @apply border-brand bg-brand text-white shadow-sm hover:border-brand hover:bg-brand;
   }
 
   /* Stat tile */
   .stat {
-    @apply rounded-2xl border border-slate-200 bg-white p-5 shadow-sm;
+    @apply rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm;
   }
   .stat-value {
-    @apply text-2xl font-extrabold text-ink;
+    @apply font-display num text-2xl font-bold text-ink;
   }
   .stat-label {
-    @apply mt-0.5 text-xs font-medium text-slate-400;
+    @apply mt-1 text-xs font-medium text-slate-400;
   }
 }

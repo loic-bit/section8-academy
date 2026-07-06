@@ -33,8 +33,8 @@ export default function ProgressRing({ value = 0, size = 56, stroke = 6, classNa
         y="50%"
         dominantBaseline="central"
         textAnchor="middle"
-        className="fill-ink font-bold"
-        style={{ fontSize: size * 0.28 }}
+        className="fill-ink font-display font-bold"
+        style={{ fontSize: size * 0.28, fontVariantNumeric: 'tabular-nums', letterSpacing: '-0.02em' }}
       >
         {Math.round(clamped)}%
       </text>

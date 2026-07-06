@@ -32,7 +32,7 @@ export default function Home() {
 
   return (
     <div>
-      <div className="mb-2 text-2xl font-extrabold sm:text-3xl">Welcome back, {firstName} 👋</div>
+      <div className="mb-2 font-display text-[26px] font-bold tracking-tight sm:text-3xl">Welcome back, {firstName}</div>
       <p className="mb-8 text-slate-500">Here is where you are and your next step toward owning doors.</p>
 
       {/* Progress + continue hero */}
@@ -44,12 +44,12 @@ export default function Home() {
             {next ? (
               <>
                 <div className="text-sm text-slate-500">Continue where you left off</div>
-                <div className="truncate text-lg font-bold">{next.title}</div>
+                <div className="truncate font-display text-lg font-bold">{next.title}</div>
                 <Link to="/course" className="btn-primary mt-3 !py-2 text-sm">Resume course →</Link>
               </>
             ) : (
               <>
-                <div className="text-lg font-bold">You finished every lesson. 🎉</div>
+                <div className="font-display text-lg font-bold">You finished every lesson. 🎉</div>
                 <div className="text-sm text-slate-500">Time to put it to work. Book a call to plan your first or next deal.</div>
                 <Link to="/get-help" className="btn-primary mt-3 !py-2 text-sm">Get a game plan →</Link>
               </>
@@ -70,8 +70,8 @@ export default function Home() {
           <Link key={t.to} to={t.to} className="card card-hover relative">
             {t.soon && <span className="badge-muted absolute right-4 top-4">Soon</span>}
             <div className="mb-3 text-2xl">{t.icon}</div>
-            <h3 className="font-bold">{t.title}</h3>
-            <p className="mt-1 text-sm text-slate-500">{t.desc}</p>
+            <h3 className="font-display font-bold">{t.title}</h3>
+            <p className="mt-1 text-sm leading-relaxed text-slate-500">{t.desc}</p>
           </Link>
         ))}
       </div>
@@ -79,7 +79,7 @@ export default function Home() {
       {/* Work with us */}
       <div className="mt-8 overflow-hidden rounded-2xl bg-brand p-6 text-white sm:p-8">
         <div className="eyebrow mb-1 text-white/70">Ready to move faster?</div>
-        <h3 className="text-xl font-extrabold">Get 1-on-1 help or let our team do it for you</h3>
+        <h3 className="font-display text-xl font-bold tracking-tight">Get 1-on-1 help or let our team do it for you</h3>
         <p className="mt-1 max-w-xl text-sm text-white/80">
           You have the tools and the training. When you want a proven team in your corner, we map the fastest path to your next deal.
         </p>

@@ -6,8 +6,8 @@ export default function ContentBlocks({ blocks }) {
   return (
     <div className="space-y-4">
       {blocks.map((b, i) => {
-        if (b.h) return <h4 key={i} className="pt-1 text-base font-bold text-ink">{b.h}</h4>;
-        if (b.p) return <p key={i} className="text-sm leading-relaxed text-slate-600">{b.p}</p>;
+        if (b.h) return <h4 key={i} className="pt-1 font-display text-base font-bold text-ink">{b.h}</h4>;
+        if (b.p) return <p key={i} className="text-[15px] leading-relaxed text-slate-600">{b.p}</p>;
         if (b.list)
           return (
             <ul key={i} className="space-y-2 text-sm text-slate-600">
