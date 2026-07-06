@@ -13,7 +13,7 @@ export default {
         { p: 'The most common thing I hear from members at this stage is some version of: I do not earn enough to ever reach 50 doors. I understand the math you are running in your head. Save 20 thousand dollars a year, one door per year, 50 years. That math is wrong, and this lesson shows you why.' },
         { h: 'Your salary is not the throttle' },
         { p: 'Your timeline to 50 doors is set by deal quality, not by your paycheck. When you refinance a BRRRR, most of your capital comes back out and goes into the next deal. The one number that matters most is the cash left stuck in each deal after the refinance. Our average BRRRR leaves 10 to 17 thousand dollars in the deal. That stuck cash is the real cost of each door, and it is what your savings actually have to cover.' },
-        { p: 'One student result, not a typical outcome: Giorgio went from 0 to 9 properties generating 14,000 dollars per month in 5 months. He did not do that on a giant salary. He did it by keeping the cash stuck in each deal low and recycling the same capital again and again.' },
+        { p: 'One student result, not a typical outcome: Giorgio went from 0 to 9 properties using the BRRRR method, managing all of it from Mexico. He did not do that on a giant salary. He did it by keeping the cash stuck in each deal low and recycling the same capital again and again.' },
         { h: 'Run your own numbers' },
         { steps: [
           'Open the Path to 50 Doors calculator and enter your starting cash, the amount you can deploy today.',

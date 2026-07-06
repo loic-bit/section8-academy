@@ -137,7 +137,7 @@ export default {
         { p: 'I built the Strategy Comparison so you can put your own capital, your own hours, and your own risk tolerance into the same five filters and see which vehicle wins for you. If it is not Section 8, better to know now than three properties deep.' },
         { link: { to: '/compare', label: 'Run the Strategy Comparison with your numbers' } },
         { link: { to: '/quiz', label: 'Take the Readiness Quiz' } },
-        { p: 'One student example of what the vehicle can look like when it is the right fit: Giorgio went from 0 to 9 properties generating 14,000 dollars per month in 5 months. That is a student result, not a typical outcome, and he did the work. But it shows what the ceiling looks like when the strategy matches the person.' },
+        { p: 'One student example of what the vehicle can look like when it is the right fit: David started with 30,000 dollars and now owns 5 properties producing 2,400 dollars per month at a 19 percent return. That is a student result, not a typical outcome, and he did the work. But it shows what the ceiling looks like when the strategy matches the person.' },
         { tip: 'The best strategy is not the one with the biggest number on a screenshot. It is the one whose risks you can actually carry. If your comparison points to Section 8, the next module, Section 8 Foundations, shows you exactly how the machine works from voucher to deposit.' }
       ]
     }

@@ -113,7 +113,7 @@ export default {
           'Appreciation: at a modest 2 percent, about 2,600 dollars in year one, on paper until you sell or refinance.'
         ] },
         { h: 'Now stack ten doors' },
-        { p: 'Ten doors at those numbers is an estimated 3,000 to 4,000 dollars per month in cash flow, roughly 15,000 dollars per year in loan paydown funded by tenants, and appreciation working across 1.3 million dollars of assets instead of one house. This is not theory. One of my students, Giorgio, went from 0 to 9 properties generating 14,000 dollars per month in 5 months. That is a student result, not a typical outcome, but it shows what the math does when you actually execute.' },
+        { p: 'Ten doors at those numbers is an estimated 3,000 to 4,000 dollars per month in cash flow, roughly 15,000 dollars per year in loan paydown funded by tenants, and appreciation working across 1.3 million dollars of assets instead of one house. This is not theory. One of my students, Sarah, a California school teacher, built up 4 Cleveland properties she has never once visited, producing 3,500 dollars per month within 18 months. That is a student result, not a typical outcome, but it shows what the math does when you actually execute.' },
         { link: { to: '/fifty-doors', label: 'Open the Path to 50 Doors calculator' } },
         { tip: 'Run your own numbers in the Path to 50 Doors calculator using 350 dollars per month per door. Watch what happens between door 5 and door 10. That is where the compounding becomes visible.' }
       ]
