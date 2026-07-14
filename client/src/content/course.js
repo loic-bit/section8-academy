@@ -14,11 +14,20 @@ import m8new from './modules/m8new.js';
 // Level 3 re-homes m7's scale lessons into a dedicated Scale module alongside
 // the two new ones, keeping original lesson ids so nobody loses progress.
 const m7lessons = m7.lessons;
+
+// Joseph (2026-07): form the LLC BEFORE the first purchase. The entity lesson
+// moves up into Picking the Right Market as its closing step (replacing the
+// retired landlord-friendly-states lesson). Lesson id stays m7l3 so nobody
+// loses progress.
+const market = {
+  ...m2,
+  lessons: [...m2.lessons, m7lessons.find((l) => l.id === 'm7l3')].filter(Boolean),
+};
 const own = {
   id: 'm7',
   title: 'Own & Operate',
   tagline: 'Run the portfolio without it running you, and protect what you build.',
-  lessons: m7lessons.filter((l) => ['m7l1', 'm7l2', 'm7l3'].includes(l.id)),
+  lessons: m7lessons.filter((l) => ['m7l1', 'm7l2'].includes(l.id)),
 };
 const scale = {
   id: 'm8',
@@ -53,7 +62,7 @@ export const LEVELS = [
     unlock: 'unlock-operator',
     checkpoint: 'portfolio',
     tagline: 'Market, find, analyze, fund, and close your first Section 8 deal.',
-    modules: [m2, m3, m4, m5, m6],
+    modules: [market, m3, m4, m5, m6],
   },
   {
     key: 'scale',

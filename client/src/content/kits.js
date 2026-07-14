@@ -10,7 +10,7 @@ export const KITS = [
     icon: '🗺️',
     level: 2,
     tagline: 'Pick a market with real numbers and define exactly what you buy.',
-    assets: ['market-scorecard', 'fmr-rent-research', 'landlord-friendly-states', 'buy-box-worksheet'],
+    assets: ['market-scorecard', 'fmr-rent-research', 'buy-box-worksheet'],
   },
   {
     slug: 'deal-analysis',

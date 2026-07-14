@@ -40,10 +40,10 @@ export default {
     },
     {
       id: 'm7l3',
-      title: 'Entity structure and asset protection',
-      minutes: 6,
+      title: 'Forming your LLC: entity structure and asset protection',
+      minutes: 7,
       body: [
-        { p: 'As your portfolio grows, protecting it becomes as important as growing it. One lawsuit or one accident should not put everything you own at risk. This lesson is about how investors structure ownership and insurance to keep what they build safe. One note before I start: I am an investor sharing how I think about this, not an attorney, so treat this as a map and consult a real professional for your situation.' },
+        { p: 'You are about to pick a market and buy a property. Before you do, decide what buys it, because I buy under an LLC from day one, and setting one up takes an afternoon. One lawsuit or one accident should not put everything you own at risk. This lesson is about how investors structure ownership and insurance to keep what they build safe. One note before I start: I am an investor sharing how I think about this, not an attorney, so treat this as a map and consult a real professional for your situation.' },
         { h: 'Why investors use LLCs' },
         { p: 'An LLC, or Limited Liability Company, is the entity most rental investors hold property in. The idea is separation: the LLC owns the property, so if something goes wrong at that property and leads to a lawsuit, the claim is generally against the LLC and its assets, not against your personal home, savings, and car. It draws a line between your business life and your personal life.' },
         { h: 'Keep personal and business separate' },
@@ -51,6 +51,14 @@ export default {
         { h: 'Insurance is your first layer' },
         { list: ['A solid landlord policy on each property covers the building and basic liability.', 'An umbrella policy sits on top and adds a large layer of liability coverage across your assets for a relatively low annual cost.', 'The entity and the insurance work together: insurance pays the claim, the entity structure limits what is exposed if a claim exceeds coverage.'] },
         { p: 'How you structure entities as you scale, one LLC per property, a holding company, or something else, is a real decision with tax and legal weight. This is exactly where a good attorney and CPA earn their fee.' },
+        { h: 'Forming the LLC, step by step' },
+        { steps: [
+          'Form it in the state where the property sits. Forming in a fancy state like Delaware and then registering again in the property state just doubles your fees.',
+          'File the articles of organization on the state website. Most states charge $50 to $500 and approve it within days.',
+          'Get an EIN from the IRS website. It is free and takes about ten minutes.',
+          'Open a business checking account in the LLC name, and run every dollar for the property through it.',
+          'Buy in the LLC name: it goes on the purchase contract, and DSCR lenders lend to LLCs all day. One more reason DSCR fits this model.',
+        ] },
         { link: { to: '/get-help', label: 'Ask About Getting Set Up' } },
         { tip: 'Separation protects you: an LLC keeps a lawsuit at the property from reaching your personal life, but only if you keep the books and bank accounts truly separate. Add an umbrella policy on top, and get an attorney to structure it. This is not legal advice.' }
       ]

@@ -66,48 +66,6 @@ export default {
       ],
     },
     {
-      slug: 'landlord-friendly-states',
-      name: 'Landlord-Friendly States Guide',
-      kind: 'Guide',
-      icon: '⚖️',
-      tagline: 'Why the legal environment can matter more than the cash flow.',
-      body: [
-        { p: 'I have watched investors chase a 300 dollar cash flow into a state where a single bad tenant costs them six months of lost rent and 5,000 dollars in legal fees. The legal environment is not a footnote. In Section 8, where you will occasionally deal with a non-paying or non-compliant tenant, the speed and fairness of the courts can matter more than the spread on the deal.' },
-        { h: 'What makes a state friendly' },
-        {
-          list: [
-            'Fast evictions: a clean non-payment case resolves in 30 to 45 days, not 4 to 6 months.',
-            'Clear law: statutes favor a straightforward process without stacking tenant protections.',
-            'No rent control: you can set rent to the payment standard and raise it on renewal.',
-            'Reasonable security deposit rules: you can hold enough to cover real damage.',
-            'Landlord-friendly courts: judges enforce leases rather than granting repeated delays.',
-          ],
-        },
-        { h: 'What makes a state unfriendly' },
-        {
-          list: [
-            'Eviction timelines that run 5 to 9 months even for clear non-payment.',
-            'Mandatory mediation, right-to-counsel programs, and long mandatory notice periods.',
-            'Rent control or rent stabilization that caps your upside.',
-            'Just-cause eviction laws that make it hard to remove even a problem tenant.',
-            'Deposit caps and steep penalties for small paperwork mistakes.',
-          ],
-        },
-        { h: 'How to research it' },
-        {
-          steps: [
-            'Search the state statute for the eviction process and read the required notice periods and timelines.',
-            'Ask two local property managers how long a real eviction takes from filing to sheriff lockout.',
-            'Ask a local landlord attorney what the average cost and timeline runs for a non-payment case.',
-            'Check whether the city layers its own tenant protections on top of state law, because cities often do.',
-            'Read the state and city rules on Section 8 specifically, including source-of-income laws.',
-          ],
-        },
-        { p: 'You do not have to only buy in the friendliest states, but you must price the risk. If I invest in a slower state, I hold larger reserves and I screen tenants harder, because the court will not bail me out quickly.' },
-        { tip: 'Underwrite the worst-case eviction, not the average month. If a six-month eviction plus turnover would wipe out a year of profit, the cash flow was never as good as the spreadsheet claimed.' },
-      ],
-    },
-    {
       slug: 'buy-box-worksheet',
       name: 'Buy Box Worksheet',
       kind: 'Worksheet',

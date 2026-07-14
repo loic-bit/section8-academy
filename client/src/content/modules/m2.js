@@ -10,7 +10,7 @@ export default {
       body: [
         { p: 'The mistake I see new investors make is picking a market because the houses are cheap. Cheap is not the goal. Cash flow is the goal, and a $60,000 house that only rents for $700 is worse than a $110,000 house that rents for $1,500. The market either makes the math work or it does not, and you can tell before you buy a single property.' },
         { h: 'The rent-to-price ratio is the core filter' },
-        { p: 'Everything starts with the relationship between the rent I can collect and the price I pay. I want a high payment standard relative to purchase price. A rough screen I use is the 1% rule: monthly rent should be at least 1% of the all-in price. On a $120,000 house that means I want a rent near $1,200 or higher. In a strong Section 8 market I can find 1.2% to 1.5%, and that spread is what pays me after the mortgage, taxes, insurance, and repairs.' },
+        { p: 'Everything starts with the relationship between the rent I can collect and the price I pay. I want a high payment standard relative to purchase price. The screen I use is the 1.3% rule: monthly rent should be at least 1.3% of the all-in price. On a $100,000 all-in house that means I want a rent near $1,300 or higher. In a strong Section 8 market those deals exist, and that spread is what pays me after the mortgage, taxes, insurance, and repairs.' },
         { list: [
           'Rent at or above 1% of the all-in price is the floor.',
           '1.2% to 1.5% is where the cash flow gets comfortable.',
@@ -27,33 +27,6 @@ export default {
           'A rent-to-price ratio at 1% or better.'
         ] },
         { tip: 'A market works when a high metro payment standard sits on top of low neighborhood prices, with real voucher demand and fair landlord laws. Screen for the rent-to-price ratio first and it will kill most bad markets before you waste time on them.' }
-      ]
-    },
-    {
-      id: 'm2l2',
-      title: 'Landlord-friendly vs tenant-friendly states',
-      minutes: 6,
-      body: [
-        { p: 'The same house with the same rent can be a great investment in one state and a trap in another, and the difference is the law. When a tenant stops paying or breaks the lease, how fast and how cheaply I can act depends entirely on the state I bought in. This is not a detail, it is a core part of your risk.' },
-        { h: 'Why the legal environment is a number, not a vibe' },
-        { p: 'The main thing I measure is eviction timeline. In a landlord-friendly state, a clear-cut eviction might run 3 to 6 weeks from filing to resolution. In a tenant-friendly state, that same case can drag 3 to 9 months, and during those months I am covering the mortgage on a unit that pays me nothing. Every extra month of that timeline is real dollars out of my pocket, so I price it into how much risk a market carries.' },
-        { list: [
-          'Eviction timeline: weeks in a friendly state, many months in an unfriendly one.',
-          'Notice periods and cure rights: short and clear vs long and stacked.',
-          'Local rules like rent control or source-of-income complications.',
-          'Court backlog and how predictable the process is.'
-        ] },
-        { h: 'How the two environments feel in practice' },
-        { p: 'In landlord-friendly markets across much of the Southeast and Midwest, the process is clearer, the timelines are shorter, and the courts are more predictable, so a bad tenant is a manageable problem. In tenant-friendly markets, often in parts of the Northeast and the West Coast, the process is slower and more expensive, so one problem tenant can wipe out a year of profit. I am not saying you can never win in those markets, only that the risk is higher and the numbers have to be better to justify it.' },
-        { h: 'How it changes your buying' },
-        { p: 'I weight landlord friendliness heavily when I choose a metro, because Section 8 already gives me a reliable rent, and pairing that with a fast legal backstop is what makes the whole model low-stress. Before I buy in any new state, I look up the eviction process, the average timeline, and any source-of-income laws, and I talk to a local property manager who has actually done an eviction there.' },
-        { steps: [
-          'Look up the state eviction timeline and notice requirements.',
-          'Check for rent control or unusual local tenant protections.',
-          'Call a local property manager and ask how long their last eviction took.',
-          'Only then decide if the rent-to-price ratio is high enough to justify the legal risk.'
-        ] },
-        { tip: 'Reliable rent plus a fast eviction backstop is the low-stress version of this business. Do not fall in love with a cheap house in a state where removing a bad tenant takes nine months.' }
       ]
     },
     {
@@ -134,6 +107,6 @@ export default {
         ] },
         { tip: 'Depth beats breadth until your first market runs itself. Master one market, build the team and the relationships, then copy that playbook into the next one. Do not spread thin chasing the feeling of diversification.' }
       ]
-    }
+    },
   ],
 };

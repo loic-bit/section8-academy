@@ -70,38 +70,37 @@ export default {
     },
     {
       slug: 'creative-financing-playbook',
-      name: 'Creative Financing Playbook',
+      name: 'Private Money & Partnerships Playbook',
       kind: 'Playbook',
       icon: '🎯',
-      tagline: 'How to buy when you are low on cash: seller finance, private money, partnerships.',
-      linkedTool: '/calculators',
+      tagline: 'How I fund deals without a bank, and why I skip seller financing.',
       body: [
-        { h: 'Why creative financing matters' },
-        { p: 'Running out of down payment cash is the number one reason new investors stall. Creative financing is how I keep buying when the bank is not the answer. Here are the three structures I use most, how each one works, and how I pitch them.' },
-        { h: 'Seller financing' },
-        { p: 'The seller becomes my bank. Instead of paying all cash at closing, I pay them a down payment and monthly payments at an agreed rate and term. It works best on a property the seller owns free and clear.' },
-        { steps: [
-          'Find a motivated seller who owns it outright and does not need all the cash now.',
-          'Pitch the benefit: steady monthly income, interest they would not earn in the bank, and spreading their capital gains tax over years instead of one lump.',
-          'Structure it: for example, 10 percent down, 6 percent interest, 30 year amortization with a 5 year balloon. On a 200,000 dollar house that is 20,000 down and roughly 1,079 a month, and I refinance or sell before the balloon.'
+        { p: 'When people say creative financing they usually mean three things: seller financing, private money, and partnerships. I use two of them. This playbook covers how I structure the two that work, and why I want you to skip the one the internet will not stop selling you.' },
+        { h: 'First: why I skip seller financing' },
+        { list: [
+          'Adverse selection: a seller with a clean, cash-flowing house gets full price on the open market. The ones offering terms are usually moving a problem.',
+          'You pay for the terms: padded price, higher rate, or a balloon payment that comes due whether or not you are ready.',
+          'It kills the recycle: this model runs on buy below market, renovate, refinance at the new value. Seller-carried notes and wrapped titles make that refinance messy or impossible.',
+          'Bigger legal surface: due-on-sale exposure, note servicing, title complications. More ways for paperwork to go wrong.',
         ] },
-        { h: 'Private money' },
-        { p: 'A private lender is a person, not an institution, who lends me money secured by the property. They earn a fixed return, I get funds fast without bank underwriting.' },
+        { h: 'Private money: how to structure it' },
         { steps: [
-          'Find someone with idle cash in savings or a retirement account earning almost nothing.',
-          'Pitch a fixed return, often 8 to 12 percent, secured by a mortgage or deed of trust on the property so they are protected.',
-          'Structure it: for example, borrow 150,000 at 10 percent interest-only for 12 months to buy and rehab a BRRRR, then refinance and pay them back in full.'
+          'Find the lender in your own network first: a professional, a business owner, a family friend with idle savings.',
+          'Lead with a specific deal, never a general ask. Address, numbers, rehab scope, exit.',
+          'Offer a fixed return, typically 8 to 10 percent, secured by a lien on the property. Their name is on a recorded document, not a promise.',
+          'Agree on the term and what happens at the refinance: they get repaid from the new loan, you keep the door.',
+          'Have an attorney paper the note and the deed of trust. Every time, even with family.',
         ] },
-        { h: 'Partnerships' },
-        { p: 'I bring the deal and the work, a partner brings the capital. We agree on the split before anyone signs.' },
+        { h: 'Partnerships: how to split it' },
         { steps: [
-          'Define roles: I find, fund the analysis, manage the rehab and the tenant. My partner funds the down payment.',
-          'Pitch the split: a common structure is 50 to 50 on cash flow and equity, or the money partner takes a larger share until their capital is returned.',
-          'Structure it: put it in writing, an operating agreement or joint venture agreement, so the exit and the split are clear.'
+          'Define the roles in one sentence each: you bring the deal, the numbers, and the Section 8 process. They bring the capital.',
+          'Agree the split up front, in writing: equity split, cash flow split, and who decides what.',
+          'Put the property in an entity both partners own per the agreement.',
+          'Agree the exit before you enter: what happens at refinance, at sale, and if one of you wants out.',
         ] },
-        { link: { to: '/calculators', label: 'Open the Calculators' } },
-        { tip: 'Creative financing is not a loophole, it is a relationship. Lead with what the other person gets, protect their money with real security, and do exactly what you said you would do.' }
-      ]
+        { p: 'The pattern in both: a specific deal with real numbers does the convincing. Nobody funds enthusiasm. Everybody funds a documented deal with a clear return and a secured position.' },
+        { tip: 'Skip seller financing: adverse selection plus a broken refinance is a bad trade. Private money and partnerships built on one specific, documented deal are how investors with skill and no cash get their first doors.' },
+      ],
     },
     {
       slug: 'lender-questions-checklist',

@@ -4,20 +4,20 @@ export default {
   tagline: 'From offer to a voucher tenant paying you, without the paperwork and inspections scaring you off.',
   lessons: [
     {
-      id: 'm6l1',
-      title: 'Passing the HQS inspection the first time',
-      minutes: 7,
+      id: 'm6l3',
+      title: 'Screening voucher tenants the right way',
+      minutes: 6,
       body: [
-        { p: 'The HQS inspection scares off more new Section 8 landlords than anything else, and it should not. HQS stands for Housing Quality Standards, and the inspection is just a checklist of basic health and safety items. When I know exactly what the inspector checks, I fix it during rehab, and I pass on the first visit. A failed inspection is not a rejection, it is a to-do list, but passing the first time saves weeks of lost rent.' },
-        { h: 'What the inspector actually checks' },
-        { p: 'The inspector is not grading your taste. They are confirming the unit is safe and livable. These are the items that come up on nearly every inspection.' },
-        { list: ['Working smoke detectors on every level and a carbon monoxide detector where required.', 'No peeling, chipping, or flaking paint, which matters most in older homes because of lead paint rules.', 'Secure handrails on any staircase with four or more steps.', 'GFCI outlets near water sources like kitchens and bathrooms.', 'Working heat that reaches every room and a safe, functioning hot water heater.', 'Windows that open, close, and lock, with no broken glass.', 'No exposed wiring, no leaks under sinks, and every outlet and light in working order.'] },
-        { h: 'Fix it during rehab, not after the fail' },
-        { p: 'Here is my approach: I treat the HQS list as part of my rehab scope from day one. Detectors, GFCI outlets, handrails, and paint are cheap and fast to handle while the crew is already in the house. It costs almost nothing to do up front and a lot in lost time to do after a failed inspection sends me back.' },
-        { h: 'The common fails' },
-        { p: 'The fails I see over and over are dead or missing smoke and CO detectors, a chip of peeling paint on a window sill, a missing handrail, and a non-GFCI outlet by the sink. Every one of them is a 20 dollar fix that costs weeks if you find out on inspection day. The Vault has a full HQS Inspection Checklist I walk every unit against before I ever call for the inspection.' },
-        { link: { to: '/vault', label: 'Get the HQS Inspection Checklist' } },
-        { tip: 'The HQS inspection is a checklist, not a judgment. Build detectors, GFCI outlets, handrails, heat, and fresh paint into your rehab scope, walk the Vault checklist yourself first, and you pass on visit one.' }
+        { p: 'Having a voucher does not mean skipping your screening. It means one part of your screening, the rent payment, is already backed by the housing authority. I still run every voucher applicant through a full, consistent screen, because the tenant is who I live with for years, and good screening is what protects the whole deal.' },
+        { h: 'Verify the voucher and income' },
+        { p: 'First, I confirm the voucher itself with the PHA. The housing authority verifies the tenant income and tells me the household size the voucher covers and the tenant portion of the rent. This is a real advantage of Section 8: the largest slice of your rent is verified and paid by the PHA, so my income risk is far lower than with a market tenant.' },
+        { h: 'Screen the rest like any tenant' },
+        { list: ['Background check for a pattern of violent or property-related offenses that put other residents at risk.', 'Eviction history, so I understand how they have treated past landlords and properties.', 'Landlord references, my favorite step: I call the previous two landlords and ask if the tenant paid on time, kept the unit clean, and would be welcomed back.', 'Consistency: I apply the exact same criteria to every applicant, which keeps my process fair and compliant with fair housing law.'] },
+        { h: 'Why this protects you' },
+        { p: 'A voucher guarantees the PHA portion of the rent. It does not guarantee the tenant will care for your property or get along with neighbors. Screening for history and references is how I find the voucher tenants who treat the home well and stay for years. And voucher tenants have a strong reason to be good tenants, because losing the unit can mean losing hard-won access to the program.' },
+        { p: 'If you want help building a screening process or reviewing a tricky applicant, reach out and I will point you the right way.' },
+        { link: { to: '/get-help', label: 'Ask a Screening Question' } },
+        { tip: 'A voucher secures the rent, not the behavior. Verify the voucher with the PHA, then run background, eviction history, and landlord references on every applicant the exact same way. Screening is what keeps a good deal good.' }
       ]
     },
     {
@@ -38,20 +38,20 @@ export default {
       ]
     },
     {
-      id: 'm6l3',
-      title: 'Screening voucher tenants the right way',
-      minutes: 6,
+      id: 'm6l1',
+      title: 'Passing the HQS inspection the first time',
+      minutes: 7,
       body: [
-        { p: 'Having a voucher does not mean skipping your screening. It means one part of your screening, the rent payment, is already backed by the housing authority. I still run every voucher applicant through a full, consistent screen, because the tenant is who I live with for years, and good screening is what protects the whole deal.' },
-        { h: 'Verify the voucher and income' },
-        { p: 'First, I confirm the voucher itself with the PHA. The housing authority verifies the tenant income and tells me the household size the voucher covers and the tenant portion of the rent. This is a real advantage of Section 8: the largest slice of your rent is verified and paid by the PHA, so my income risk is far lower than with a market tenant.' },
-        { h: 'Screen the rest like any tenant' },
-        { list: ['Background check for a pattern of violent or property-related offenses that put other residents at risk.', 'Eviction history, so I understand how they have treated past landlords and properties.', 'Landlord references, my favorite step: I call the previous two landlords and ask if the tenant paid on time, kept the unit clean, and would be welcomed back.', 'Consistency: I apply the exact same criteria to every applicant, which keeps my process fair and compliant with fair housing law.'] },
-        { h: 'Why this protects you' },
-        { p: 'A voucher guarantees the PHA portion of the rent. It does not guarantee the tenant will care for your property or get along with neighbors. Screening for history and references is how I find the voucher tenants who treat the home well and stay for years. And voucher tenants have a strong reason to be good tenants, because losing the unit can mean losing hard-won access to the program.' },
-        { p: 'If you want help building a screening process or reviewing a tricky applicant, reach out and I will point you the right way.' },
-        { link: { to: '/get-help', label: 'Ask a Screening Question' } },
-        { tip: 'A voucher secures the rent, not the behavior. Verify the voucher with the PHA, then run background, eviction history, and landlord references on every applicant the exact same way. Screening is what keeps a good deal good.' }
+        { p: 'The HQS inspection scares off more new Section 8 landlords than anything else, and it should not. HQS stands for Housing Quality Standards, and the inspection is just a checklist of basic health and safety items. When I know exactly what the inspector checks, I fix it during rehab, and I pass on the first visit. A failed inspection is not a rejection, it is a to-do list, but passing the first time saves weeks of lost rent.' },
+        { h: 'What the inspector actually checks' },
+        { p: 'The inspector is not grading your taste. They are confirming the unit is safe and livable. These are the items that come up on nearly every inspection.' },
+        { list: ['Working smoke detectors on every level and a carbon monoxide detector where required.', 'No peeling, chipping, or flaking paint, which matters most in older homes because of lead paint rules.', 'Secure handrails on any staircase with four or more steps.', 'GFCI outlets near water sources like kitchens and bathrooms.', 'Working heat that reaches every room and a safe, functioning hot water heater.', 'Windows that open, close, and lock, with no broken glass.', 'No exposed wiring, no leaks under sinks, and every outlet and light in working order.'] },
+        { h: 'Fix it during rehab, not after the fail' },
+        { p: 'Here is my approach: I treat the HQS list as part of my rehab scope from day one. Detectors, GFCI outlets, handrails, and paint are cheap and fast to handle while the crew is already in the house. It costs almost nothing to do up front and a lot in lost time to do after a failed inspection sends me back.' },
+        { h: 'The common fails' },
+        { p: 'The fails I see over and over are dead or missing smoke and CO detectors, a chip of peeling paint on a window sill, a missing handrail, and a non-GFCI outlet by the sink. Every one of them is a 20 dollar fix that costs weeks if you find out on inspection day. The Vault has a full HQS Inspection Checklist I walk every unit against before I ever call for the inspection.' },
+        { link: { to: '/vault', label: 'Get the HQS Inspection Checklist' } },
+        { tip: 'The HQS inspection is a checklist, not a judgment. Build detectors, GFCI outlets, handrails, heat, and fresh paint into your rehab scope, walk the Vault checklist yourself first, and you pass on visit one.' }
       ]
     },
     {
@@ -85,6 +85,6 @@ export default {
         { p: 'Treat the PHA as a long-term partner, not a hurdle. The landlords they trust get smoother inspections and quicker approvals, and that is worth protecting.' },
         { tip: 'Section 8 is an annual cycle, not a one-time setup. Keep the unit inspection-ready all year, expect a yearly recert and inspection, request rent increases that market comps support, and stay easy for your PHA to work with.' }
       ]
-    }
+    },
   ]
 };

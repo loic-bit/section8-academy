@@ -11,7 +11,7 @@ export default {
         { p: 'The number one thing that kept me on the sidelines for years was a belief that turned out to be wrong. I thought I needed to save up the full price of a house before I could buy anything. That is the all-cash myth, and it stops more people than any inspection or paperwork ever will. Here is the real math on what it takes to get your first Section 8 rental.' },
         { h: 'The four buckets your money goes into' },
         { p: 'When I buy a property, my cash is not one big number. It is four smaller numbers stacked together, and only one of them is the down payment.' },
-        { list: ['Down payment: on an investment property this is usually 20 to 25 percent of the price with a conventional loan, and far less on the low-money-down paths.', 'Closing costs: lender fees, title, and taxes that run roughly 2 to 5 percent of the loan amount.', 'Reserves: I keep 6 months of mortgage, taxes, and insurance in the bank so a vacancy or a repair does not sink me.', 'Rehab: what it costs to get the unit to pass inspection and rent, from a few thousand for paint and detectors to more on a heavier project.'] },
+        { list: ['Down payment: on an investment property this is usually 20 to 25 percent of the price with a conventional loan, and far less on the low-money-down paths.', 'Closing costs: on a BRRRR, plan on roughly $3,500 for title and $4,500 in lender fees, call it $8,000 all in. On a straight DSCR purchase, figure about 2 percent of the loan amount plus around $5,500 in fixed costs.', 'Reserves: I keep 6 months of mortgage, taxes, and insurance in the bank so a vacancy or a repair does not sink me.', 'Rehab: what it costs to get the unit to pass inspection and rent, from a few thousand for paint and detectors to more on a heavier project.'] },
         { h: 'You have more paths than you think' },
         { p: 'The 20 to 25 percent down number is the conventional path, and it is real. But it is not the only door. Over the next lessons I break down DSCR loans that qualify on the property instead of your W2, the BRRRR strategy that recycles the same cash into deal after deal, seller financing and private money where the cash is not even yours, and house hacking with as little as 3.5 percent down. The point of this lesson is simple: pick a target number for one deal, then work backward to which path fits it.' },
         { p: 'Run your own numbers before you fall in love with a property. When I plug in a real price, my down payment, closing, reserves, and rehab against the rent, I can see in two minutes whether the deal feeds me or eats me.' },
@@ -54,19 +54,24 @@ export default {
     },
     {
       id: 'm5l4',
-      title: 'Creative financing: seller finance, private money, partnerships',
+      title: 'Private money and partnerships (and why I skip seller financing)',
       minutes: 7,
       body: [
-        { p: 'Banks are one way to fund a deal. They are not the only way. Some of my best deals were funded with money that never touched a traditional lender. Creative financing means structuring the deal so the cash comes from the seller, from a private person, or from a partner. Here is how each one works.' },
-        { h: 'Seller and owner financing' },
-        { p: 'With seller financing, the person selling the house acts as the bank. Instead of you getting a mortgage, you make payments directly to the seller over time on agreed terms: a price, an interest rate, a down payment, and a length. This works best with sellers who own the property free and clear and care more about steady monthly income than a lump sum. I pitch it plainly: I offer a fair price, a down payment they are comfortable with, and payments that beat what their money would earn sitting in the bank.' },
-        { h: 'Private money' },
+        { p: 'Banks are one way to fund a deal. They are not the only way. But before I show you the two alternatives I actually use, I want to kill a strategy the internet loves and I do not: seller financing. Knowing why NOT to use something is worth as much as knowing what to use.' },
+        { h: 'Why I skip seller and owner financing' },
+        { list: [
+          'The sellers who say yes are usually selling a problem. A seller with a clean, cash-flowing property gets full price from the open market. The ones offering terms are often moving a house the market already rejected.',
+          'You pay for the terms. Seller-financed deals almost always carry a padded price, a higher rate, or a balloon payment that comes due whether or not you are ready for it.',
+          'It fights the model. This system runs on buying below market, renovating, and refinancing at the new value. Seller-carried notes and wrapped titles make that refinance messy or impossible, which kills the capital recycle that gets you to door two.',
+          'The legal surface is bigger: due-on-sale exposure, note servicing, title complications. More paperwork risk, and you know how I feel about sloppy paperwork.',
+        ] },
+        { p: 'Can a seller-financed deal ever work? Somewhere, for someone experienced, sure. As a way to buy your first doors in this model, the odds are stacked against you. Skip it.' },
+        { h: 'Private money: an alternative I do use' },
         { p: 'A private lender is a regular person with capital who lends it to you for a fixed return secured by the property. This is not a hard-money company, it is a doctor, a business owner, or a family friend who would rather earn 8 to 10 percent backed by real estate than watch their savings do nothing. I never chase their money. I present a specific deal, show the numbers, explain how their loan is secured by the property, and let the deal do the convincing.' },
-        { h: 'Partnerships' },
-        { p: 'A partnership is the cleanest path when you have the skill but not the cash. You bring the deal and the system: finding the property, running the numbers, managing the Section 8 process and the tenant. Your partner brings the capital. You split the returns on terms you agree to in writing up front. This is how a lot of beginners with no money and real hustle get their first few doors.' },
-        { list: ['Seller finance: the seller becomes your bank, best when they own it outright.', 'Private money: an individual lends at a fixed return secured by the property.', 'Partnership: you bring the deal and the work, they bring the money, you split it.'] },
+        { h: 'Partnerships: the cleanest path when you have skill and no cash' },
+        { p: 'You bring the deal and the system: finding the property, running the numbers, managing the Section 8 process and the tenant. Your partner brings the capital. You split the returns on terms you agree to in writing up front. This is how a lot of beginners with real hustle get their first few doors.' },
         { p: 'Whatever the structure, put it in writing and have an attorney paper it correctly. A handshake is not a plan.' },
-        { tip: 'If you have no cash but you can find and run a deal, you are not stuck, you are the deal. Lead with a specific property and real numbers, and the money finds you.' }
+        { tip: 'Skip seller financing: you usually inherit a problem house at a padded price and lose the refinance that powers the recycle. Private money and partnerships are the real paths. Lead with a specific deal and real numbers, and the money finds you.' }
       ]
     },
     {
@@ -85,6 +90,6 @@ export default {
         { link: { to: '/calculators', label: 'Open the Deal Calculators' } },
         { tip: 'House hacking turns your home into your first investment. Use an FHA loan at 3.5 percent down, let tenants cover your mortgage, live nearly free for a year, then keep it as a rental and do it again.' }
       ]
-    }
+    },
   ]
 };

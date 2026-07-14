@@ -47,14 +47,6 @@ export const LESSON_META = {
       { label: 'FMR & Rent Research Guide', to: '/vault/fmr-rent-research', kind: 'Guide' },
     ],
   },
-  m2l2: {
-    video: null, // URL added later when recorded
-    description: 'How landlord-friendly and tenant-friendly state laws change your risk, your timelines, and where I choose to invest.',
-    resources: [
-      { label: 'Landlord-Friendly States', to: '/vault/landlord-friendly-states', kind: 'Guide' },
-      { label: 'Eviction Process Map', to: '/vault/eviction-process-map', kind: 'Playbook' },
-    ],
-  },
   m2l3: {
     video: null, // URL added later when recorded
     description: 'How to read rent, price, and demand data together so a market tells you the truth before you commit capital.',
@@ -68,7 +60,6 @@ export const LESSON_META = {
     description: 'My exact process for scoring a market on a single sheet before I ever look at a property.',
     resources: [
       { label: 'Market Scorecard', to: '/vault/market-scorecard', kind: 'Scorecard' },
-      { label: 'Landlord-Friendly States', to: '/vault/landlord-friendly-states', kind: 'Guide' },
     ],
   },
   m2l5: {
@@ -129,9 +120,9 @@ export const LESSON_META = {
   },
   m4l2: {
     video: null, // URL added later when recorded
-    description: 'How the 1% and 50% rules can guide you and exactly when they mislead you on a real deal.',
+    description: 'The 1.3% rule in ten seconds, and exactly when quick filters mislead you on a real deal.',
     resources: [
-      { label: 'Rule of 1% and 50%', to: '/vault/rule-1-and-50', kind: 'Guide' },
+      { label: 'The 1.3% and 70% Rule Guide', to: '/vault/rule-1-and-50', kind: 'Guide' },
       { label: 'Deal Calculator', to: '/calculators', kind: 'Tool' },
     ],
   },
