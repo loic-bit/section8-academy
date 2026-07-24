@@ -1,4 +1,5 @@
 import PageHeader from '../components/PageHeader.jsx';
+import { trackNow } from '../lib/track.js';
 
 // Real booking funnels (provided by Loic, 2026-07-06). Env vars can override
 // per environment without a code change.
@@ -61,6 +62,7 @@ export default function GetHelp() {
           href={MENTORSHIP_URL}
           target="_blank"
           rel="noreferrer"
+          onClick={() => trackNow('calendar_click', { which: 'hero', href: MENTORSHIP_URL })}
           className="btn mt-4 bg-white text-brand hover:bg-slate-100"
         >
           Book your call
@@ -90,6 +92,7 @@ export default function GetHelp() {
               href={p.href}
               target="_blank"
               rel="noreferrer"
+              onClick={() => trackNow('calendar_click', { which: p.tag, href: p.href })}
               className="btn-primary mt-6 w-full"
             >
               {p.cta}

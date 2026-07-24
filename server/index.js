@@ -6,6 +6,8 @@ import jwt from 'jsonwebtoken';
 import { pool, initDb } from './db.js';
 import { mirrorLeadToAirtable } from './airtable.js';
 import { mirrorSignupToKit } from './kit.js';
+import { EVENT_TYPES, LESSON_ID_RE, VALID_UNLOCKS, UNLOCK_PREFIX } from './scoring.js';
+import { registerAdminRoutes } from './admin.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3000;
@@ -55,6 +57,34 @@ function authRequired(req, res, next) {
   }
 }
 
+// Admins = ADMIN_EMAILS env (comma-separated), the single source of admin
+// truth: evaluated per request (never baked into the 30-day JWT, so a
+// redeploy revokes instantly). The users.is_admin column exists in the
+// schema but is deliberately unread until a real role system needs it.
+const ADMIN_EMAILS = new Set(
+  (process.env.ADMIN_EMAILS || '')
+    .split(',')
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean)
+);
+
+const isAdminUser = (user) => !!user?.email && ADMIN_EMAILS.has(user.email.toLowerCase());
+
+function adminRequired(req, res, next) {
+  if (isAdminUser(req.user)) return next();
+  res.status(403).json({ error: 'Forbidden' });
+}
+
+// Fire-and-forget server-side event. Analytics must never fail a request.
+function recordEvent(userId, type, payload = {}, sessionId = null) {
+  pool
+    .query(
+      'INSERT INTO events (user_id, event_type, payload, session_id) VALUES ($1, $2, $3, $4)',
+      [userId, type, payload, sessionId]
+    )
+    .catch((e) => console.warn('[events]', e.message));
+}
+
 const publicUser = (u) => ({ id: u.id, name: u.name, email: u.email });
 
 // ── Health ────────────────────────────────────────────────────────────────
@@ -88,8 +118,12 @@ app.post('/api/auth/signup', async (req, res) => {
     // Mirror to CRM + email list — fire and forget, never blocks signup.
     mirrorLeadToAirtable({ name, email });
     mirrorSignupToKit({ name, email });
+    recordEvent(user.id, 'signup', {});
 
-    res.json({ token: signToken(user), user: publicUser(user) });
+    res.json({
+      token: signToken(user),
+      user: { ...publicUser(user), isAdmin: ADMIN_EMAILS.has(email) },
+    });
   } catch (e) {
     console.error('[signup]', e);
     res.status(500).json({ error: 'Something went wrong. Please try again.' });
@@ -105,7 +139,11 @@ app.post('/api/auth/login', async (req, res) => {
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ error: 'Invalid email or password.' });
     }
-    res.json({ token: signToken(user), user: publicUser(user) });
+    recordEvent(user.id, 'login', {});
+    res.json({
+      token: signToken(user),
+      user: { ...publicUser(user), isAdmin: isAdminUser(user) },
+    });
   } catch (e) {
     console.error('[login]', e);
     res.status(500).json({ error: 'Something went wrong. Please try again.' });
@@ -118,7 +156,7 @@ app.get('/api/auth/me', authRequired, async (req, res) => {
     [req.user.id]
   );
   if (!rows[0]) return res.status(401).json({ error: 'Unauthorized' });
-  res.json({ user: rows[0] });
+  res.json({ user: { ...rows[0], isAdmin: isAdminUser(rows[0]) } });
 });
 
 // ── Course progress ───────────────────────────────────────────────────────
@@ -133,20 +171,32 @@ app.get('/api/progress', authRequired, async (req, res) => {
 app.post('/api/progress', authRequired, async (req, res) => {
   const lessonId = (req.body.lessonId || '').trim();
   if (!lessonId) return res.status(400).json({ error: 'lessonId required' });
+  // Only real lesson ids and the two known checkpoint unlocks may be written:
+  // fabricated ids would otherwise inflate lesson counts and game the lead score.
+  if (!LESSON_ID_RE.test(lessonId) && !VALID_UNLOCKS.has(lessonId)) {
+    return res.status(400).json({ error: 'Unknown lessonId' });
+  }
   await pool.query(
     `INSERT INTO course_progress (user_id, lesson_id) VALUES ($1, $2)
      ON CONFLICT (user_id, lesson_id) DO NOTHING`,
     [req.user.id, lessonId]
   );
+  recordEvent(
+    req.user.id,
+    lessonId.startsWith(UNLOCK_PREFIX) ? 'checkpoint_claimed' : 'lesson_complete',
+    { lessonId }
+  );
   res.json({ ok: true });
 });
 
-// Un-mark a lesson (toggle a completed lesson back to not-done).
+// Un-mark a lesson (toggle a completed lesson back to not-done). The event
+// row is the only surviving history once the progress row is deleted.
 app.delete('/api/progress/:lessonId', authRequired, async (req, res) => {
   await pool.query('DELETE FROM course_progress WHERE user_id = $1 AND lesson_id = $2', [
     req.user.id,
     req.params.lessonId,
   ]);
+  recordEvent(req.user.id, 'lesson_uncomplete', { lessonId: req.params.lessonId });
   res.json({ ok: true });
 });
 
@@ -166,6 +216,7 @@ app.post('/api/deals', authRequired, async (req, res) => {
     'INSERT INTO saved_deals (user_id, label, data) VALUES ($1, $2, $3) RETURNING id, label, data, created_at',
     [req.user.id, label, data]
   );
+  recordEvent(req.user.id, 'deal_saved', { label, hasListingUrl: !!data.listingUrl });
   res.json({ deal: rows[0] });
 });
 
@@ -209,7 +260,76 @@ app.post('/api/dealfinder/trial', authRequired, async (req, res) => {
     email: req.user.email,
     source: 'AI Deal Finder Trial',
   });
+  recordEvent(req.user.id, 'finder_trial_click', { via: 'in_app' });
   res.json({ ok: true });
+});
+
+// ── Event ingest (batched, first-party analytics) ─────────────────────────
+app.post('/api/events', authRequired, async (req, res) => {
+  const incoming = Array.isArray(req.body.events) ? req.body.events.slice(0, 25) : [];
+  const rows = [];
+  for (const e of incoming) {
+    const type = String(e?.type || '');
+    if (!EVENT_TYPES.has(type)) continue;
+    // Arrays must not reach the jsonb param: node-pg serializes JS arrays as
+    // Postgres array literals, which rejects the INSERT and loses the batch.
+    let payload =
+      e?.payload && typeof e.payload === 'object' && !Array.isArray(e.payload) ? e.payload : {};
+    let json = JSON.stringify(payload);
+    if (json.length > 4000) json = JSON.stringify({ truncated: true });
+    const sid = e?.sessionId ? String(e.sessionId).slice(0, 64) : null;
+    rows.push([req.user.id, type, json, sid]);
+  }
+  if (rows.length) {
+    const values = rows
+      .map((_, i) => `($${i * 4 + 1}, $${i * 4 + 2}, $${i * 4 + 3}, $${i * 4 + 4})`)
+      .join(', ');
+    await pool.query(
+      `INSERT INTO events (user_id, event_type, payload, session_id) VALUES ${values}`,
+      rows.flat()
+    );
+    // Denormalized recency for the admin list. Batching (>=8s between client
+    // flushes) is the throttle; no in-memory bookkeeping to leak.
+    pool
+      .query('UPDATE users SET last_seen = now() WHERE id = $1', [req.user.id])
+      .catch(() => {});
+  }
+  res.json({ ok: true, accepted: rows.length });
+});
+
+// ── Readiness Quiz results (the financial qualification signal) ───────────
+app.get('/api/quiz/me', authRequired, async (req, res) => {
+  const { rows } = await pool.query(
+    `SELECT winner, answers, totals, low_fidelity, created_at FROM quiz_results
+     WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1`,
+    [req.user.id]
+  );
+  res.json({ result: rows[0] || null });
+});
+
+app.post('/api/quiz', authRequired, async (req, res) => {
+  const winner = (req.body.winner || '').toString().slice(0, 40);
+  const answers = req.body.answers && typeof req.body.answers === 'object' ? req.body.answers : {};
+  const answerLabels =
+    req.body.answerLabels && typeof req.body.answerLabels === 'object' ? req.body.answerLabels : {};
+  const totals = req.body.totals && typeof req.body.totals === 'object' ? req.body.totals : {};
+  const lowFidelity = !!req.body.lowFidelity;
+  if (!winner) return res.status(400).json({ error: 'winner required' });
+  await pool.query(
+    `INSERT INTO quiz_results (user_id, answers, answer_labels, totals, winner, low_fidelity)
+     VALUES ($1, $2, $3, $4, $5, $6)`,
+    [req.user.id, answers, answerLabels, totals, winner, lowFidelity]
+  );
+  recordEvent(req.user.id, 'quiz_completed', { winner, lowFidelity });
+  res.json({ ok: true });
+});
+
+// ── Admin analytics API (registered via patched verbs, above the SPA
+//    catch-all; real protection lives here, the client gate is UX only) ────
+registerAdminRoutes(app, {
+  authRequired,
+  adminRequired,
+  isAdminEmail: (email) => ADMIN_EMAILS.has(String(email || '').toLowerCase()),
 });
 
 // ── Static frontend (production build) + SPA fallback ─────────────────────

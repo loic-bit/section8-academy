@@ -33,6 +33,13 @@ export function AuthProvider({ children }) {
 
   function logout() {
     clearToken();
+    // Drop the cached quiz result so one browser's result can never bleed
+    // into the next account that logs in here.
+    try {
+      localStorage.removeItem('is8_quiz_result');
+    } catch {
+      /* ignore */
+    }
     setUser(null);
   }
 

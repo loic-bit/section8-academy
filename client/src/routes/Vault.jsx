@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { track } from '../lib/track.js';
 import PageHeader from '../components/PageHeader.jsx';
 import ContentBlocks from '../components/ContentBlocks.jsx';
 import { VAULT, TOOLS, vaultBySlug } from '../content/vault.js';
@@ -10,6 +11,12 @@ import { KITS, kitBySlug, kitForAsset, kitIntro } from '../content/kits.js';
 export default function Vault() {
   const [query, setQuery] = useState('');
   const q = query.trim().toLowerCase();
+
+  useEffect(() => {
+    if (!q) return;
+    const t = setTimeout(() => track('vault_search', { q }), 800);
+    return () => clearTimeout(t);
+  }, [q]);
 
   const hits = useMemo(() => {
     if (!q) return null;
@@ -117,6 +124,11 @@ function ToolCard({ t }) {
 export function KitPage() {
   const { slug } = useParams();
   const kit = kitBySlug(slug);
+
+  useEffect(() => {
+    if (kit) track('kit_open', { slug });
+  }, [slug]);
+
   if (!kit) {
     return (
       <div>
@@ -163,6 +175,11 @@ export function KitPage() {
 export function VaultAsset() {
   const { slug } = useParams();
   const asset = vaultBySlug(slug);
+  const kit = asset ? kitForAsset(asset.slug) : null;
+
+  useEffect(() => {
+    if (asset) track('vault_asset_open', { slug, kind: asset.kind, kit: kit?.slug });
+  }, [slug]);
 
   if (!asset) {
     return (
@@ -173,7 +190,6 @@ export function VaultAsset() {
     );
   }
 
-  const kit = kitForAsset(asset.slug);
   const siblings = kit
     ? kit.assets.filter((s) => s !== asset.slug).map((s) => vaultBySlug(s)).filter(Boolean).slice(0, 3)
     : [];

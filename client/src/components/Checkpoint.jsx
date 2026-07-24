@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { api } from '../lib/api.js';
+import { track } from '../lib/track.js';
 import { CHECKPOINTS } from '../content/checkpoints.js';
 
 // Level checkpoint quiz. Pass 5/6 → POST the unlock pseudo-lesson to
@@ -15,15 +16,22 @@ export default function Checkpoint({ ckey, onPassed, onClose }) {
 
   const total = cp.questions.length;
 
+  // Single source of truth for the score; pick() needs it before state commits.
+  const scoreOf = (arr) => arr.reduce((n, a, i) => n + (a === cp.questions[i].correct ? 1 : 0), 0);
+
   function pick(idx) {
     const next = [...answers];
     next[step] = idx;
     setAnswers(next);
     if (step < total - 1) setStep(step + 1);
-    else setDone(true);
+    else {
+      setDone(true);
+      const s = scoreOf(next);
+      track('checkpoint_result', { checkpointId: cp.id, score: s, total, passed: s >= cp.passMark, answers: next });
+    }
   }
 
-  const score = answers.reduce((n, a, i) => n + (a === cp.questions[i].correct ? 1 : 0), 0);
+  const score = scoreOf(answers);
   const passed = score >= cp.passMark;
   const wrong = cp.questions.map((q, i) => ({ q, i, picked: answers[i] })).filter((x) => x.picked !== x.q.correct);
 
@@ -40,6 +48,7 @@ export default function Checkpoint({ ckey, onPassed, onClose }) {
   }
 
   function retake() {
+    track('checkpoint_retake', { checkpointId: cp.id });
     setStep(0);
     setAnswers([]);
     setDone(false);

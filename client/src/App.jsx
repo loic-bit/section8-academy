@@ -14,6 +14,7 @@ import Compare from './routes/Compare.jsx';
 import PropertyAnalyzer from './routes/PropertyAnalyzer.jsx';
 import Finder from './routes/Finder.jsx';
 import GetHelp from './routes/GetHelp.jsx';
+import Admin from './routes/Admin.jsx';
 import Vault, { VaultAsset, KitPage } from './routes/Vault.jsx';
 
 function Protected({ children }) {
@@ -56,6 +57,7 @@ export default function App() {
         <Route path="analyzer" element={<PropertyAnalyzer />} />
         <Route path="finder" element={<Finder />} />
         <Route path="get-help" element={<GetHelp />} />
+        <Route path="admin" element={<Admin />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

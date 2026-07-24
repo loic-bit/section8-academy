@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../lib/api.js';
+import { trackNow } from '../lib/track.js';
 import COPY from '../content/dealfinderCopy.js';
 
 // AI Deal Finder: the advanced-member product page. 30-day free trial, then
@@ -20,6 +21,10 @@ export default function Finder() {
 
   async function startTrial() {
     if (EXTERNAL_URL) {
+      trackNow('finder_trial_click', { via: 'external' });
+      // Still file the trial_requests row: lead scoring and the CRM mirror
+      // read that table even when checkout happens externally.
+      api('/dealfinder/trial', { method: 'POST' }).catch(() => {});
       window.open(EXTERNAL_URL, '_blank', 'noreferrer');
       return;
     }

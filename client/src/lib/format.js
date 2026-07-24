@@ -13,22 +13,23 @@ export const money = (n) =>
 export const pct = (n) => (Number.isFinite(n) ? `${n.toFixed(1)}%` : '0.0%');
 
 // "2 days ago" / "just now" — relative time for saved-deal timestamps etc.
-export function relTime(input) {
+// Pass { compact: true } for table-cell forms: "2m ago", "3h ago", "5d ago".
+export function relTime(input, { compact = false } = {}) {
   const d = new Date(input);
   if (Number.isNaN(d.getTime())) return '';
   const secs = Math.round((Date.now() - d.getTime()) / 1000);
   const table = [
-    ['year', 31536000],
-    ['month', 2592000],
-    ['week', 604800],
-    ['day', 86400],
-    ['hour', 3600],
-    ['minute', 60],
+    ['year', 'y', 31536000],
+    ['month', 'mo', 2592000],
+    ['week', 'w', 604800],
+    ['day', 'd', 86400],
+    ['hour', 'h', 3600],
+    ['minute', 'm', 60],
   ];
   if (secs < 45) return 'just now';
-  for (const [unit, span] of table) {
+  for (const [unit, short, span] of table) {
     const v = Math.floor(secs / span);
-    if (v >= 1) return `${v} ${unit}${v > 1 ? 's' : ''} ago`;
+    if (v >= 1) return compact ? `${v}${short} ago` : `${v} ${unit}${v > 1 ? 's' : ''} ago`;
   }
   return 'just now';
 }

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import PageHeader from '../components/PageHeader.jsx';
+import { useToolTracking } from '../lib/useToolTracking.js';
 import { money, pct } from '../lib/format.js';
 
 // BRRRR = Buy, Rehab, Rent, Refinance, Repeat. The question this answers:
@@ -69,6 +70,14 @@ export default function Brrrr() {
   const [v, setV] = useState(DEFAULTS);
   const [copied, setCopied] = useState(false);
   const r = useMemo(() => compute(v), [v]);
+
+  useToolTracking('brrrr', [v], () => ({
+    inputs: v,
+    results: {
+      cashLeftIn: Math.round(r.cashLeftIn),
+      cashOnCash: r.fullRecycle ? 'infinite' : +r.cashOnCash.toFixed(1),
+    },
+  }));
 
   const set = (key) => (e) => setV({ ...v, [key]: parseFloat(e.target.value) || 0 });
   const reset = () => setV(DEFAULTS);

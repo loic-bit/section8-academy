@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import PageHeader from '../components/PageHeader.jsx';
+import { useToolTracking } from '../lib/useToolTracking.js';
 import { money } from '../lib/format.js';
 
 // Path to 50 Doors. Ported from Joseph's standalone page: a month-by-month
@@ -115,6 +116,14 @@ export default function FiftyDoors() {
   const [v, setV] = useState({ reserve: 20000, monthly: 2000, down: 15000, left: 5000, cf: 300 });
   const sim = useMemo(() => simulate(v), [v]);
   const set = (key) => (e) => setV({ ...v, [key]: +e.target.value });
+
+  useToolTracking('fifty-doors', [v], () => ({
+    inputs: v,
+    results: {
+      monthsToTarget: sim.targetMonth,
+      doors: sim.hist[sim.hist.length - 1],
+    },
+  }));
 
   const groups = [...new Set(SLIDERS.map((s) => s.group))];
   const fin = sim.targetMonth ? equityAt(sim, sim.targetMonth) : null;

@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../lib/api.js';
+import { track } from '../lib/track.js';
 import PageHeader from '../components/PageHeader.jsx';
 import ContentBlocks from '../components/ContentBlocks.jsx';
 import ProgressRing from '../components/ProgressRing.jsx';
@@ -20,8 +21,103 @@ function toEmbed(url) {
   return url;
 }
 
-function VideoFrame({ video, title }) {
+// Lazy, once-per-page load of the YouTube iframe API. Resolves with window.YT.
+let ytApiPromise = null;
+function loadYouTubeApi() {
+  if (!ytApiPromise) {
+    ytApiPromise = new Promise((resolve) => {
+      if (window.YT && window.YT.Player) return resolve(window.YT);
+      const prev = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => {
+        if (typeof prev === 'function') prev();
+        resolve(window.YT);
+      };
+      const s = document.createElement('script');
+      s.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(s);
+    });
+  }
+  return ytApiPromise;
+}
+
+const VIDEO_MILESTONES = [25, 50, 75, 95];
+
+// Quartiles fire once per lesson per session: the iframe remounts every time
+// a lesson is re-expanded, but this map survives, so no duplicate events.
+const firedMilestones = new Map(); // lessonId -> Set of fired milestone pcts
+
+function VideoFrame({ video, title, lessonId }) {
   const src = toEmbed(video);
+  const isYouTube = !!src && src.includes('youtube.com/embed/');
+  const frameSrc = isYouTube ? `${src}${src.includes('?') ? '&' : '?'}enablejsapi=1` : src;
+  const frameRef = useRef(null);
+
+  useEffect(() => {
+    if (!isYouTube || !frameRef.current) return;
+    let cancelled = false;
+    let player = null;
+    let interval = null;
+    let fired = firedMilestones.get(lessonId);
+    if (!fired) {
+      fired = new Set();
+      firedMilestones.set(lessonId, fired);
+    }
+
+    const stopPolling = () => {
+      if (interval) {
+        clearInterval(interval);
+        interval = null;
+      }
+    };
+
+    try {
+      loadYouTubeApi()
+        .then((YT) => {
+          if (cancelled || !YT || !frameRef.current) return;
+          player = new YT.Player(frameRef.current, {
+            events: {
+              onStateChange: (e) => {
+                try {
+                  if (e.data !== YT.PlayerState.PLAYING) return stopPolling();
+                  if (interval) return;
+                  interval = setInterval(() => {
+                    try {
+                      const duration = player.getDuration();
+                      if (!duration) return;
+                      const pct = (player.getCurrentTime() / duration) * 100;
+                      for (const m of VIDEO_MILESTONES) {
+                        if (pct >= m && !fired.has(m)) {
+                          fired.add(m);
+                          track('video_progress', { lessonId, pct: m });
+                        }
+                      }
+                    } catch {
+                      /* player gone mid-poll */
+                    }
+                  }, 5000);
+                } catch {
+                  /* never let the player break the lesson */
+                }
+              },
+            },
+          });
+        })
+        .catch(() => {});
+    } catch {
+      /* never let the player break the lesson */
+    }
+
+    return () => {
+      cancelled = true;
+      stopPolling();
+      try {
+        if (player) player.destroy();
+      } catch {
+        /* player already gone */
+      }
+    };
+  }, [isYouTube, src, lessonId]);
+
   if (!src) {
     return (
       <div className="flex aspect-video w-full flex-col items-center justify-center rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-900 to-slate-700 text-center text-white/90">
@@ -38,7 +134,8 @@ function VideoFrame({ video, title }) {
   return (
     <div className="aspect-video w-full overflow-hidden rounded-2xl border border-slate-200 bg-black">
       <iframe
-        src={src}
+        ref={frameRef}
+        src={frameSrc}
         title={title}
         className="h-full w-full"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -48,7 +145,7 @@ function VideoFrame({ video, title }) {
   );
 }
 
-function ResourceList({ resources }) {
+function ResourceList({ resources, lessonId }) {
   if (!resources || resources.length === 0) return null;
   return (
     <div className="mt-6">
@@ -58,6 +155,7 @@ function ResourceList({ resources }) {
           <Link
             key={r.to + r.label}
             to={r.to}
+            onClick={() => track('resource_click', { lessonId, to: r.to, kind: r.kind })}
             className="group flex items-center justify-between rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm transition duration-160 ease-premium hover:border-slate-300 hover:bg-slate-50"
           >
             <span className="flex items-center gap-2.5">
@@ -200,7 +298,10 @@ export default function Course() {
                     return (
                       <div key={m.id} className="card !p-0 overflow-hidden">
                         <button
-                          onClick={() => setOpenModule(isModuleOpen ? '' : m.id)}
+                          onClick={() => {
+                            if (!isModuleOpen) track('module_open', { moduleId: m.id });
+                            setOpenModule(isModuleOpen ? '' : m.id);
+                          }}
                           className="flex w-full items-center gap-4 px-5 py-4 text-left transition duration-160 ease-premium hover:bg-slate-50/70 sm:px-6"
                         >
                           <ProgressRing value={mPct} size={46} stroke={5} className="shrink-0" />
@@ -225,7 +326,10 @@ export default function Course() {
                                 <li key={l.id} className="border-b border-slate-50 last:border-0">
                                   <div className="flex items-center justify-between gap-3 px-5 py-3 text-sm transition duration-160 ease-premium hover:bg-slate-50/60 sm:px-6">
                                     <button
-                                      onClick={() => setOpenLesson(isExpanded ? null : l.id)}
+                                      onClick={() => {
+                                        if (!isExpanded) track('lesson_open', { lessonId: l.id, moduleId: m.id, levelKey: lv.key });
+                                        setOpenLesson(isExpanded ? null : l.id);
+                                      }}
                                       className="flex min-w-0 flex-1 items-center gap-3 text-left"
                                     >
                                       <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs transition duration-160 ${isDone ? 'bg-brand text-white' : 'border border-slate-300 text-transparent'}`}>✓</span>
@@ -237,12 +341,12 @@ export default function Course() {
 
                                   {isExpanded && (
                                     <div className="border-t border-slate-100 bg-slate-50/60 px-5 py-6 sm:px-6">
-                                      <VideoFrame video={meta.video} title={l.title} />
+                                      <VideoFrame video={meta.video} title={l.title} lessonId={l.id} />
                                       {meta.description && <p className="mt-5 leading-relaxed text-slate-600">{meta.description}</p>}
                                       <div className="mt-5">
                                         <ContentBlocks blocks={l.body || []} />
                                       </div>
-                                      <ResourceList resources={meta.resources} />
+                                      <ResourceList resources={meta.resources} lessonId={l.id} />
                                       <div className="mt-6 border-t border-slate-200/70 pt-5">
                                         <button
                                           onClick={() => toggle(l.id)}

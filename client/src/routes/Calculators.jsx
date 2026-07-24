@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { api } from '../lib/api.js';
+import { trackNow } from '../lib/track.js';
+import { useToolTracking } from '../lib/useToolTracking.js';
 import PageHeader from '../components/PageHeader.jsx';
 import { money, pct, relTime } from '../lib/format.js';
 
@@ -94,6 +96,15 @@ export default function Calculators() {
   const editRef = useRef(null);
 
   const r = useMemo(() => compute(v), [v]);
+
+  useToolTracking('calculators', [v], () => ({
+    inputs: v,
+    results: {
+      cashFlow: Math.round(r.cashFlow),
+      cashOnCash: +r.cashOnCash.toFixed(1),
+      capRate: +r.capRate.toFixed(1),
+    },
+  }));
 
   useEffect(() => {
     api('/deals')
@@ -296,6 +307,7 @@ export default function Calculators() {
                         href={deal.data.listingUrl}
                         target="_blank"
                         rel="noreferrer"
+                        onClick={() => trackNow('listing_click', {})}
                         className="btn-ghost !px-3 !py-1.5 text-xs text-brand"
                       >
                         Listing ↗

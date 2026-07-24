@@ -1,6 +1,10 @@
 // Investor Readiness Quiz. Each answer adds points to one or more profiles.
 // Highest total wins. Educational guidance, not financial advice.
 
+// CONTRACT: option ORDER within each question is a server-side contract.
+// server/scoring.js (qualBand + dfySignal) reads option indexes as financial
+// meaning. Append new options at the END; never insert or reorder without
+// updating qualBand in the same change.
 export const QUIZ = [
   {
     id: 'capital',

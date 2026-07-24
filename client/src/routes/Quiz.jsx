@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getToken } from '../lib/api.js';
+import { track } from '../lib/track.js';
 import PageHeader from '../components/PageHeader.jsx';
 import { QUIZ, PROFILES, scoreQuiz } from '../content/quiz.js';
 
@@ -34,12 +36,27 @@ export default function Quiz() {
     if (step < QUIZ.length - 1) {
       setStep(step + 1);
     } else {
-      const { winner } = scoreQuiz(next);
+      const { winner, totals } = scoreQuiz(next);
       setResult({ winner, at: new Date().toISOString() });
+      const answerLabels = {};
+      for (const question of QUIZ) {
+        const opt = question.options[next[question.id]];
+        if (!opt) continue;
+        answerLabels[question.id] = { q: question.q, a: opt.label };
+      }
+      // Raw fetch on purpose: the api() helper hard-redirects to /login on a
+      // 401 and must never fire mid-quiz. keepalive survives a quick tab close.
+      fetch('/api/quiz', {
+        method: 'POST',
+        keepalive: true,
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
+        body: JSON.stringify({ winner, answers: next, answerLabels, totals }),
+      }).catch(() => {});
     }
   }
 
   function retake() {
+    track('quiz_retake', {});
     setAnswers({});
     setStep(0);
     setResult(null);

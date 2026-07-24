@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../lib/auth.jsx';
+import { initTracking, track } from '../lib/track.js';
 import BrandMark from './BrandMark.jsx';
 
 // Five items. Calculators and quizzes live inside the Toolkit and are linked
@@ -13,7 +14,11 @@ const NAV = [
   { to: '/get-help', label: 'Get Help', icon: '🤝' },
 ];
 
+// Admin-only sixth item; invisible to everyone else.
+const ADMIN_ITEM = { to: '/admin', label: 'Admin', icon: '📊' };
+
 function SidebarContent({ user, onLogout, onNavigate }) {
+  const items = user?.isAdmin === true ? [...NAV, ADMIN_ITEM] : NAV;
   return (
     <>
       <div className="px-6 py-5">
@@ -21,7 +26,7 @@ function SidebarContent({ user, onLogout, onNavigate }) {
       </div>
 
       <nav className="flex-1 space-y-1 px-3">
-        {NAV.map((item) => (
+        {items.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
@@ -61,8 +66,16 @@ export default function DashboardLayout() {
   const location = useLocation();
   const [open, setOpen] = useState(false);
 
-  // Close the mobile drawer whenever the route changes.
-  useEffect(() => setOpen(false), [location.pathname]);
+  // Analytics boot.
+  useEffect(() => {
+    initTracking();
+  }, []);
+
+  // Close the mobile drawer and log a page view whenever the route changes.
+  useEffect(() => {
+    setOpen(false);
+    track('page_view', { path: location.pathname });
+  }, [location.pathname]);
 
   function handleLogout() {
     logout();

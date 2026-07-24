@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import PageHeader from '../components/PageHeader.jsx';
+import { useToolTracking } from '../lib/useToolTracking.js';
 
 // Goal Planner: Turnkey vs BRRRR. Ported from Joseph's strategy one-pager.
 // Pick a goal (income / doors / net worth), pick a strategy, set your starting
@@ -132,6 +133,11 @@ export default function GoalPlanner() {
   const sim = useMemo(() => simulate(p), [goal, start, monthly, parallel, strat]);
   const gm = useMemo(() => goalMonth(sim, goalType, goal), [sim, goalType, goal]);
   const sn = gm ? snap(sim, gm) : null;
+
+  useToolTracking('goal-planner', [goal, start, monthly, parallel, strat], () => ({
+    inputs: { goalType, strategy: strat, goal, start, monthly, parallel },
+    results: { monthsToGoal: gm },
+  }));
 
   function pickGoal(t) {
     setGoalType(t);

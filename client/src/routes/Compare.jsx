@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PageHeader from '../components/PageHeader.jsx';
+import { track } from '../lib/track.js';
 import { FILTERS, STRATEGIES } from '../content/strategies.js';
 
 // Strategy Comparison: five ways to invest in real estate, judged on the same
@@ -47,7 +48,10 @@ export default function Compare() {
           return (
             <div key={s.slug} className={`card !p-0 overflow-hidden ${isWinner ? 'border-brand/40' : ''}`}>
               <button
-                onClick={() => setOpen(isOpen ? '' : s.slug)}
+                onClick={() => {
+                  if (!isOpen) track('compare_expand', { slug: s.slug });
+                  setOpen(isOpen ? '' : s.slug);
+                }}
                 className="flex w-full items-center gap-4 px-5 py-4 text-left transition duration-160 ease-premium hover:bg-slate-50/70 sm:px-6"
               >
                 <span className="text-2xl">{s.icon}</span>
